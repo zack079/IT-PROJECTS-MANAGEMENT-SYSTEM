@@ -15,10 +15,10 @@ public class ProjectController {
 	@Autowired
 	private ProjectService projectService;
 	
-	@RequestMapping("/tables-data")
+	@GetMapping("/tables-data")
 	public String getProjects(Model model) {
-		//List<Project> projects= projectService.getProjects();
-		//model.addAttribute("projects",projects);
+		List<Project> projects= projectService.getProjects();
+		model.addAttribute("projects",projects);
 		return "tables-data";
 	}
 }
