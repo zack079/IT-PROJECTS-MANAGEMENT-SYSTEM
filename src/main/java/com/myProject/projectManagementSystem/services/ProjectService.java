@@ -1,5 +1,6 @@
 package com.myProject.projectManagementSystem.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,13 @@ public class ProjectService {
 	private ProjectRepository projectRepository;
 	
 	public List<Project> getProjects(){
-		return projectRepository.findAll();
+		List<Project> projects= new ArrayList<Project>();
+		projectRepository.findAll().forEach(projects::add);
+		return projects;
+	}
+	
+	public void addProject(Project project) {
+		projectRepository.save(project); 
 	}
 
 }

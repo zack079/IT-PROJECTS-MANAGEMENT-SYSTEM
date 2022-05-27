@@ -39,6 +39,16 @@ public class Project {
         this.developers = developers;
         this.director = director;
     }
+    public Project(String title, String description, String type, Date start_date, String state, int duration, ProjectManager projectManager, Director director) {
+        this.title = title;
+        this.description = description;
+        this.type = type;
+        this.start_date = start_date;
+        this.state = state;
+        this.duration = duration;
+        this.projectManager = projectManager;
+        this.director = director;
+    }
 
     public List<Developer> getDevelopers() {
         return developers;
