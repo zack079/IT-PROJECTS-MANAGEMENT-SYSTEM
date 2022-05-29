@@ -15,10 +15,22 @@ public class ProjectController {
 	@Autowired
 	private ProjectService projectService;
 	
-	@GetMapping("/tables-data")
-	public String getProjects(Model model) {
+	@GetMapping("/projects-table")
+	public String getProjectsPage(Model model) {
 		List<Project> projects= projectService.getProjects();
 		model.addAttribute("projects",projects);
-		return "tables-data";
+		return "projects-table";
+	}
+	
+	@GetMapping("/add-project")
+	public String addProjectPage() {
+		return "add-project";
+	}
+	
+	@PostMapping("/add-project/addProject")
+	public String addProject(Project project) {
+		project.setState("en cours");
+		projectService.addProject(project);
+		return "redirect:/add-project";
 	}
 }
