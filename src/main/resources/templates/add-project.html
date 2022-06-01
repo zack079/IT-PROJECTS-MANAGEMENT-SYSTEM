@@ -45,7 +45,7 @@
     <div class="d-flex align-items-center justify-content-between">
       <a href="index.html" class="logo d-flex align-items-center">
         <img src="assets/img/logo.png" alt="">
-        <span class="d-none d-lg-block">NiceAdmin</span>
+        <span class="d-none d-lg-block"></span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
@@ -560,7 +560,7 @@
                 </div>
                 
                 
-				<!--
+				
                 <fieldset class="row mb-3">
                   <legend class="col-form-label col-sm-2 pt-0">Type</legend>
                   <div class="col-sm-10">
@@ -590,35 +590,31 @@
                     </div>
                   </div>
                 </fieldset>
-
+                
+                 <div class="row mb-3" >
+                  	<label class="col-sm-2 col-form-label">Choisir des developpeurs</label>
+                  	<div class="col-sm-10" th:if="${#lists.isEmpty(developers)}">aucun développeur disponible</div>
+                  		<div class="col-sm-10" th:unless="${#lists.isEmpty(developers)}">
+                    		<select class="form-select" multiple aria-label="multiple select example">
+                     			<option th:each="developer : ${developers}" th:value="${developer.id}" th:text="${developer.firstname}+ ' ' + ${developer.lastname}"></option>
+                    		</select>
+                		</div>
+                	</div>
+				
                 <div class="row mb-3">
                   <label class="col-sm-2 col-form-label">choisir un chef de projet</label>
                   <div class="col-sm-10">
-                    <select class="form-select" aria-label="Default select example">
-                      <option selected>Voir les chefs de projets:</option>
-                      <option value="1">chef de projet1</option>
-                      <option value="2">chef de projet2</option>
-                      <option value="3">chef de projet3</option>
+                    <select class="form-select" aria-label="Default select example" >
+                      <option selected >Voir les chefs de projets:</option>
+                      <option th:each="projectManager : ${projectManagers}" th:value="${projectManager.id}" th:text="${projectManager.firstname}+ ' ' + ${projectManager.lastname}"></option>
                     </select>
                   </div>
                 </div>
-
+				
                 <div class="row mb-3">
-                  <label class="col-sm-2 col-form-label">Choisir des developpeurs</label>
+                  <label class="col-sm-2 col-form-label">Soumettre</label>
                   <div class="col-sm-10">
-                    <select class="form-select" multiple aria-label="multiple select example">
-                      <option selected>Voir les developpeurs</option>
-                      <option value="1">developpeur1</option>
-                      <option value="2">developpeur2</option>
-                      <option value="3">developpeur3</option>
-                    </select>
-                  </div>
-                </div>
-				 -->
-                <div class="row mb-3">
-                  <label class="col-sm-2 col-form-label">Submit Button</label>
-                  <div class="col-sm-10">
-                    <button type="submit" class="btn btn-primary">Submit Form</button>
+                    <button type="submit" class="btn btn-primary">Soumettre</button>
                   </div>
                 </div>
 
