@@ -36,6 +36,14 @@ public class ProjectController {
 	@GetMapping("/projects-table")
 	public String getProjectsPage(Model model) {
 		List<Project> projects= projectService.getProjects();
+		List<Developer> allDevelopers =  developerService.getDevelopers();
+		List<Developer> developers = new ArrayList<Developer>();
+		for(Developer developer: allDevelopers) {
+			if(developer.getProject()!=null) {
+				developers.add(developer);
+			}
+		}
+		model.addAttribute("developers",developers);
 		model.addAttribute("projects",projects);
 		return "projects-table";
 	}
@@ -44,7 +52,7 @@ public class ProjectController {
 	public String addProjectPage(Model model) {
 		
 		model.addAttribute("project", new Project());
-		List<ProjectManager> projectManagers =  projectManagerService.getProjectManagers();
+		List<ProjectManager> projectManagers =  projectManagerService.getProjectManagers();//
 		List<Developer> allDevelopers =  developerService.getDevelopers();
 		List<Developer> developers = new ArrayList<Developer>();
 		for(Developer developer: allDevelopers) {
@@ -71,12 +79,16 @@ public class ProjectController {
 			model.addAttribute("projectInserted",true);
 			project.setState("en cours");
 			projectService.addProject(project);
+			for(Developer developer : project.getDevelopers()) {
+				developer.setProject(project);
+				developerService.addDeveloper(developer);
+			}
 		}else {
+			
 			model.addAttribute("projectNotInserted",true);
 		}
-		
 		//show developers and project managers dynamically
-		List<ProjectManager> projectManagers =  projectManagerService.getProjectManagers();
+		List<ProjectManager> projectManagers =  projectManagerService.getProjectManagers();//
 		List<Developer> allDevelopers =  developerService.getDevelopers();
 		List<Developer> developers = new ArrayList<Developer>();
 		for(Developer developer: allDevelopers) {
@@ -84,7 +96,7 @@ public class ProjectController {
 				developers.add(developer);
 			}
 		}
-		model.addAttribute("developers", developers);
+		model.addAttribute("developers", allDevelopers);
 
 		model.addAttribute("projectManagers", projectManagers);
 		return "add-project";

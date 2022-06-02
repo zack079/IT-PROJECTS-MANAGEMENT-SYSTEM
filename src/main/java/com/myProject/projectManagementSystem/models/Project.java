@@ -27,7 +27,7 @@ public class Project {
     private ProjectManager projectManager;
     @ManyToOne
     private Director director;
-    @OneToMany(fetch = FetchType.EAGER) //erros when adding (mappedBy="project")  on database PFE-hibernate
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "project")
     private List<Developer> developers=new ArrayList<Developer>();
 
     public Project(){
