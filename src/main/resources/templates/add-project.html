@@ -517,6 +517,12 @@
         </ol>
       </nav>
     </div><!-- End Page Title -->
+    <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${projectInserted}">
+               Le projet a été inseré!  
+       </div>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${projectNotInserted}">
+           Erreur d'insertion du projet!
+   	</div>
 
       <div class="row">
         <div class="">
@@ -526,76 +532,52 @@
               <h5 class="card-title">Créer un projet</h5>
 
               <!-- General Form Elements -->
-              <form th:action="@{/add-project/addProject}" method="post">
+              <form th:action="@{/project-added}" method="post" th:object="${project}">
                 <div class="row mb-3">
                   <label for="titleId" class="col-sm-2 col-form-label">Titre</label>
                   <div class="col-sm-10">
-                    <input type="text" id="titleId" name="title" class="form-control" required>
+                    <input th:field="*{title}" type="text" id="titleId" name="title" class="form-control" required >
+                    <div class="hibernate-validator-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}" ></div>
+                  
                   </div>
                 </div>
                 <div class="row mb-3">
                   <label for="typeId" class="col-sm-2 col-form-label">Type</label>
                   <div class="col-sm-10">
-                    <input type="text" id="typeId" name="type" class="form-control" required>
+                    <input th:field="*{type}" type="text" id="typeId" name="type" class="form-control" required >
+                    <div class="hibernate-validator-error" th:if="${#fields.hasErrors('type')}" th:errors="*{type}" ></div>
                   </div>
                 </div>
                 <div class="row mb-3">
                   <label for="descriptionId" class="col-sm-2 col-form-label">Description</label>
                   <div class="col-sm-10">
-                    <textarea class="form-control" id="descriptionId" name ="description"style="height: 100px" required></textarea>
+                    <textarea class="form-control" id="descriptionId" name ="description"style="height: 100px" required th:field="*{description}"></textarea>
+                  	<div class="hibernate-validator-error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}" ></div>
                   </div>
+                  <span  ></span>
                 </div>
                 
                 <div class="row mb-3">
                   <label for="start_dateId" class="col-sm-2 col-form-label">Date de début</label>
                   <div class="col-sm-10">
-                    <input type="date" id="start_dateId" name="start_date" class="form-control" required>
+                    <input type="date" id="start_dateId" name="start_date" class="form-control" required th:field="*{start_date}">
                   </div>
                 </div> 
                 <div class="row mb-3">
                   <label for="durationId" class="col-sm-2 col-form-label" >Durée (jours)</label>
                   <div class="col-sm-10">
-                    <input type="number" id="durationId" name="duration" class="form-control" min="0" required>
+                    <input type="number" id="durationId" name="duration" class="form-control" min="0" required th:field="*{duration}">
+                  	<div class="hibernate-validator-error" th:if="${#fields.hasErrors('duration')}" th:errors="*{duration}" ></div>
                   </div>
+
                 </div>
                 
-                
-				
-                <fieldset class="row mb-3">
-                  <legend class="col-form-label col-sm-2 pt-0">Type</legend>
-                  <div class="col-sm-10">
-                    <div class="form-check">
-                      <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
-                      <label class="form-check-label" for="gridRadios1">
-                        Web
-                      </label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
-                      <label class="form-check-label" for="gridRadios2">
-                        Mobile
-                      </label>
-                    </div>
-                    <div class="form-check disabled">
-                      <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3">
-                      <label class="form-check-label" for="gridRadios3">
-                        Desktop
-                      </label>
-                    </div>
-                    <div class="form-check disabled">
-                      <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios4" value="option4">
-                      <label class="form-check-label" for="gridRadios4">
-                        Autre
-                      </label>
-                    </div>
-                  </div>
-                </fieldset>
                 
                  <div class="row mb-3" >
                   	<label class="col-sm-2 col-form-label">Choisir des developpeurs</label>
                   	<div class="col-sm-10" th:if="${#lists.isEmpty(developers)}">aucun développeur disponible</div>
-                  		<div class="col-sm-10" th:unless="${#lists.isEmpty(developers)}">
-                    		<select class="form-select" multiple aria-label="multiple select example">
+                  		<div class="col-sm-10" th:unless="${#lists.isEmpty(developers)}" >
+                    		<select class="form-select" multiple aria-label="multiple select example" th:field="*{developers}" name="developers">
                      			<option th:each="developer : ${developers}" th:value="${developer.id}" th:text="${developer.firstname}+ ' ' + ${developer.lastname}"></option>
                     		</select>
                 		</div>
@@ -604,8 +586,7 @@
                 <div class="row mb-3">
                   <label class="col-sm-2 col-form-label">choisir un chef de projet</label>
                   <div class="col-sm-10">
-                    <select class="form-select" aria-label="Default select example" >
-                      <option selected >Voir les chefs de projets:</option>
+                    <select class="form-select" aria-label="Default select example"  th:field="*{projectManager}" name="projectManager">
                       <option th:each="projectManager : ${projectManagers}" th:value="${projectManager.id}" th:text="${projectManager.firstname}+ ' ' + ${projectManager.lastname}"></option>
                     </select>
                   </div>

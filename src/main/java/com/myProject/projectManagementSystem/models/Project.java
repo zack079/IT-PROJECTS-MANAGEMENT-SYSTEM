@@ -5,18 +5,23 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int projectID;
+	@Size(min = 4, message = "le titre doit contenir au moins 4 caractères!")   
     private String title;
+	@Size(min = 10, message = "la description doit contenir au moins 10 caractères!")   
     private String description;
     private String type;
     private Date start_date;
     private Date end_date;
     private String state;
+    @Min(value = 1, message="la durée doit être au moins 1 jour!")
     private int duration;
     @ManyToOne
     private ProjectManager projectManager;

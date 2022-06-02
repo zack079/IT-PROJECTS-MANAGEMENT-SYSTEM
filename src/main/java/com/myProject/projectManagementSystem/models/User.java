@@ -2,6 +2,7 @@ package com.myProject.projectManagementSystem.models;
 
 import java.util.Date;
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @MappedSuperclass
 public class User {

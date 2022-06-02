@@ -1,10 +1,18 @@
 package com.myProject.projectManagementSystem.controllers;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.myProject.projectManagementSystem.models.Developer;
 import com.myProject.projectManagementSystem.models.Project;
@@ -34,12 +42,45 @@ public class ProjectController {
 	
 	@GetMapping("/add-project")
 	public String addProjectPage(Model model) {
+		
+		model.addAttribute("project", new Project());
 		List<ProjectManager> projectManagers =  projectManagerService.getProjectManagers();
 		List<Developer> allDevelopers =  developerService.getDevelopers();
 		List<Developer> developers = new ArrayList<Developer>();
 		for(Developer developer: allDevelopers) {
 			if(developer.getProject()==null) {
-				System.out.println(developer);
+				developers.add(developer);
+			}
+		}
+		model.addAttribute("developers", developers);
+		model.addAttribute("projectManagers", projectManagers);
+		return "add-project";
+	}
+	
+	
+	@GetMapping("/project-added")
+	public String addProgectGet() {
+		return "redirect:add-project";
+
+	}
+	
+	@PostMapping("/project-added")
+	public String addProject(@Valid @ModelAttribute("project") Project project,BindingResult bindingResult,Model model) {
+		
+		if(!bindingResult.hasErrors()) {
+			model.addAttribute("projectInserted",true);
+			project.setState("en cours");
+			projectService.addProject(project);
+		}else {
+			model.addAttribute("projectNotInserted",true);
+		}
+		
+		//show developers and project managers dynamically
+		List<ProjectManager> projectManagers =  projectManagerService.getProjectManagers();
+		List<Developer> allDevelopers =  developerService.getDevelopers();
+		List<Developer> developers = new ArrayList<Developer>();
+		for(Developer developer: allDevelopers) {
+			if(developer.getProject()==null) {
 				developers.add(developer);
 			}
 		}
@@ -47,12 +88,5 @@ public class ProjectController {
 
 		model.addAttribute("projectManagers", projectManagers);
 		return "add-project";
-	}
-	
-	@PostMapping("/add-project/addProject")
-	public String addProject(Project project) {
-		project.setState("en cours");
-		projectService.addProject(project);
-		return "redirect:/add-project";
 	}
 }
