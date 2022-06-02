@@ -2,6 +2,7 @@ package com.myProject.projectManagementSystem.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,5 +24,14 @@ public class DirectorService {
 	public void addDirector(Director director) {
 		directorRepository.save(director); 
 	}
+	
+	public void deleteDirector(Integer id) {
+		directorRepository.deleteById(id);
+	}
 
+	public Director getDirectorById(Integer id) {
+		Optional<Director> optinalDirector = directorRepository.findById(id);
+		Director director = optinalDirector.get();
+		return director;
+	}
 }

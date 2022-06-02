@@ -2,6 +2,7 @@ package com.myProject.projectManagementSystem.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,5 +23,15 @@ public class DeveloperService {
 	
 	public void addDeveloper(Developer developer) {
 		developerRepository.save(developer); 
+	}
+	
+	public void deleteDeveloper(Integer id) {
+		developerRepository.deleteById(id);
+	}
+
+	public Developer getDeveloperById(Integer id) {
+		Optional<Developer> optinalDeveloper = developerRepository.findById(id);
+		Developer developer = optinalDeveloper.get();
+		return developer;
 	}
 }

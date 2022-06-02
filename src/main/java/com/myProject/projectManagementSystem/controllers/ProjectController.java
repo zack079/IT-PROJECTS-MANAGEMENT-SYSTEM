@@ -13,6 +13,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.myProject.projectManagementSystem.models.Developer;
 import com.myProject.projectManagementSystem.models.Project;
@@ -32,18 +33,9 @@ public class ProjectController {
 	@Autowired
 	private DeveloperService developerService;
 	
-	
 	@GetMapping("/projects-table")
 	public String getProjectsPage(Model model) {
 		List<Project> projects= projectService.getProjects();
-		List<Developer> allDevelopers =  developerService.getDevelopers();
-		List<Developer> developers = new ArrayList<Developer>();
-		for(Developer developer: allDevelopers) {
-			if(developer.getProject()!=null) {
-				developers.add(developer);
-			}
-		}
-		model.addAttribute("developers",developers);
 		model.addAttribute("projects",projects);
 		return "projects-table";
 	}
@@ -83,6 +75,8 @@ public class ProjectController {
 				developer.setProject(project);
 				developerService.addDeveloper(developer);
 			}
+			Project project1 = new Project();
+			model.addAttribute("project",project1);
 		}else {
 			
 			model.addAttribute("projectNotInserted",true);
@@ -96,9 +90,36 @@ public class ProjectController {
 				developers.add(developer);
 			}
 		}
-		model.addAttribute("developers", allDevelopers);
+		model.addAttribute("developers", developers);
 
 		model.addAttribute("projectManagers", projectManagers);
 		return "add-project";
 	}
+	
+	@GetMapping("/delete-project")
+	public String deleteProject(@RequestParam int id) {
+		List<Developer> developers = projectService.getProjectById(id).getDevelopers();
+		for(Developer developer : developers) {
+			developer.setProject(null);
+			developerService.addDeveloper(developer);
+		}
+		projectService.deleteProject(id);
+		return "redirect:projects-table";
+	}
+
+	@GetMapping("/edit-project")
+	public String editProject(@RequestParam int id,Model model) {
+		try {
+			Project project =projectService.getProjectById(id);
+			model.addAttribute("project",project);
+
+		}catch(Exception exception) {
+			exception.printStackTrace();
+			return "redirect:projects-table";
+		}
+		
+		return "add-project";
+	}
+
 }
+

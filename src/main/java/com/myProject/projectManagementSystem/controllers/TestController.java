@@ -21,17 +21,28 @@ import com.myProject.projectManagementSystem.services.ProjectService;
 public class TestController {
 	
 	@Autowired
-	private ProjectService projectservice;
+	private ProjectService projectService;
 	@Autowired
 	private DirectorService directorService;
 	@Autowired
 	private ProjectManagerService projectManagersService;
 	
+	/*****TEST***/
 	@GetMapping("/test")
-	public String home() {
-		
+	public String test() {
+		List<Project> projects= projectService.getProjects();
+		for(Project project : projects) {
+			System.out.println(project);
+			for(Developer developer : project.getDevelopers()) {
+				System.out.println(developer);
+			}
+			System.out.println();
+		}
 		
 		return "test";
 	}
 	
+	
+	
+	/*******TEST******/
 }
