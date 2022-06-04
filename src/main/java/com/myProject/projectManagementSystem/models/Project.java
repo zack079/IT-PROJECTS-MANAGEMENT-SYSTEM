@@ -17,9 +17,11 @@ public class Project {
     private String title;
 	@Size(min = 10, message = "la description doit contenir au moins 10 caractères!")   
     private String description;
+	@Size(min = 1, message = "le type doit être rempli!")   
     private String type;
     private Date start_date;
     private Date end_date;
+    @Size(min = 1, message = "l'état doit être rempli!")   
     private String state;
     @Min(value = 1, message="la durée doit être au moins 1 jour!")
     private int duration;

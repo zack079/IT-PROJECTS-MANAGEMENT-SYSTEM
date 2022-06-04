@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.myProject.projectManagementSystem.models.Demand;
 import com.myProject.projectManagementSystem.models.Developer;
 import com.myProject.projectManagementSystem.models.Director;
 import com.myProject.projectManagementSystem.models.Project;
 import com.myProject.projectManagementSystem.models.ProjectManager;
+import com.myProject.projectManagementSystem.services.DemandService;
 import com.myProject.projectManagementSystem.services.DirectorService;
 import com.myProject.projectManagementSystem.services.ProjectManagerService;
 import com.myProject.projectManagementSystem.services.ProjectService;
@@ -26,19 +28,17 @@ public class TestController {
 	private DirectorService directorService;
 	@Autowired
 	private ProjectManagerService projectManagersService;
-	
+	@Autowired
+	private DemandService demandService;
 	/*****TEST***/
 	@GetMapping("/test")
 	public String test() {
-		List<Project> projects= projectService.getProjects();
-		for(Project project : projects) {
-			System.out.println(project);
-			for(Developer developer : project.getDevelopers()) {
-				System.out.println(developer);
-			}
-			System.out.println();
+		List<Demand> demands= demandService.getDemands();
+		if(demands.isEmpty()) {
+			System.out.println("it's empty");
+		}else {
+			System.out.println("t");
 		}
-		
 		return "test";
 	}
 	

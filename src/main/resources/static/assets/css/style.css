@@ -8,6 +8,9 @@
   font-size: .875em;
   color: #dc3545;
 }
+
+
+
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
@@ -216,6 +219,7 @@ h1, h2, h3, h4, h5, h6 {
   border: none;
   border-radius: 5px;
   box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
+  overflow: auto
 }
 
 .card-header, .card-footer {
