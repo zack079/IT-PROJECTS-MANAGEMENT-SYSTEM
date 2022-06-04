@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Ajouter un projet</title>
+  <title>editer projet</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -508,31 +508,31 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Projet</h1>
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item">Forms</li>
-          <li class="breadcrumb-item active">Projet</li>
-        </ol>
-      </nav>
+      <h1>Editer projet ID :'<span th:text="${project.projectID}"></span>'</h1>
+      
     </div><!-- End Page Title -->
-    <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${projectInserted}">
-               Le projet a été inseré!  
+    <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${projectEdited}">
+               Les information du projet ont été changé!  
        </div>
-    <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${projectNotInserted}">
-           Erreur d'insertion du projet!
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${projectNotEdited}">
+           Erreur de changement d'information du projet!
    	</div>
-
+   	
+   	
+   	<!-- -->
+   	
+     <!--start of form of editing a project-->
+	
       <div class="row">
         <div class="">
 
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Créer un projet</h5>
+              <h5 class="card-title">changer le projet</h5>
 
               <!-- General Form Elements -->
-              <form th:action="@{/project-added}" method="post" th:object="${project}">
+              <form th:action="@{/edit-project}" method="post" th:object="${project}">
+              <input type="hidden" th:field="*{projectID}" name="projectID" />
                 <div class="row mb-3">
                   <label for="titleId" class="col-sm-2 col-form-label">Titre</label>
                   <div class="col-sm-10">
@@ -542,12 +542,21 @@
                   </div>
                 </div>
                 <div class="row mb-3">
+                  <label for="typeId" class="col-sm-2 col-form-label">Etat</label>
+                  <div class="col-sm-10">
+                    <input th:field="*{state}" type="text" id="stateId" name="state" class="form-control" required >
+                    <div class="hibernate-validator-error" th:if="${#fields.hasErrors('state')}" th:errors="*{state}" ></div>
+                  </div>
+                </div>
+                
+                <div class="row mb-3">
                   <label for="typeId" class="col-sm-2 col-form-label">Type</label>
                   <div class="col-sm-10">
                     <input th:field="*{type}" type="text" id="typeId" name="type" class="form-control" required >
                     <div class="hibernate-validator-error" th:if="${#fields.hasErrors('type')}" th:errors="*{type}" ></div>
                   </div>
                 </div>
+                
                 <div class="row mb-3">
                   <label for="descriptionId" class="col-sm-2 col-form-label">Description</label>
                   <div class="col-sm-10">
@@ -572,28 +581,10 @@
 
                 </div>
                 
-                
-                 <div class="row mb-3" >
-                  	<label class="col-sm-2 col-form-label">Choisir des developpeurs</label>
-                  	<div class="col-sm-10" th:if="${#lists.isEmpty(developers)}">aucun développeur disponible</div>
-                  		<div class="col-sm-10" th:unless="${#lists.isEmpty(developers)}" >
-                    		<select class="form-select" multiple aria-label="multiple select example" th:field="*{developers}" name="developers">
-                     			<option th:each="developer : ${developers}" th:value="${developer.id}" th:text="${developer.firstname}+ ' ' + ${developer.lastname}"></option>
-                    		</select>
-                		</div>
-                	</div>
+            
 				
                 <div class="row mb-3">
-                  <label class="col-sm-2 col-form-label">choisir un chef de projet</label>
-                  <div class="col-sm-10">
-                    <select class="form-select" aria-label="Default select example"  th:field="*{projectManager}" name="projectManager">
-                      <option th:each="projectManager : ${projectManagers}" th:value="${projectManager.id}" th:text="${projectManager.firstname}+ ' ' + ${projectManager.lastname}"></option>
-                    </select>
-                  </div>
-                </div>
-				
-                <div class="row mb-3">
-                  <label class="col-sm-2 col-form-label">Soumettre</label>
+                  <label class="col-sm-2 col-form-label"></label>
                   <div class="col-sm-10">
                     <button type="submit" class="btn btn-primary">Soumettre</button>
                   </div>
@@ -605,6 +596,141 @@
 
         </div>
       </div>
+      <!--end of form-->
+      
+      <div class="card" th:unless="${#lists.isEmpty(project.developers)}">
+        <div class="card-body">
+          <h5 class="card-title" style="color:red" >Supprimer un developpeur</h5>
+
+          <!-- Default Table -->
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Prénom</th>
+                <th scope="col">Supprimer</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="developer:${project.developers}">
+                <th scope="row" th:text="${developer.id}"></th>
+                <td th:text="${developer.lastname}"></td>
+                <td th:text="${developer.firstname}"></td>
+                <td><a th:href="@{delete-developer?id={id} (id=${developer.id})}" th:onclick="return confirm('Voulez-vous supprimer ce developpeur?');"><button class="btn btn-danger">Supprimer</button></a>  
+                </td>
+              </tr>
+            
+            </tbody>
+          </table>
+          <!-- End Default Table Example -->
+        </div>
+      </div>
+
+
+
+      <div class="row">
+        <div class="">
+
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Ajouter des developpeurs</h5>
+
+              <!-- General Form Elements -->
+              <form th:action="@{/project-edit-addDevelopers}" method="post" th:object="${developer}">      
+                 <input type="hidden" th:value="${project.projectID}" name="projectID" />
+                 <div class="row mb-3" >
+                  	<label class="col-sm-2 col-form-label">Choisir des developpeurs</label>
+                  	<div class="col-sm-10" th:if="${#lists.isEmpty(freeDevelopers)}">aucun développeur disponible</div>
+                  		<div class="col-sm-10" th:unless="${#lists.isEmpty(freeDevelopers)}" >
+                    		<select class="form-select" multiple aria-label="multiple select example" name="freeDevelopers">
+                     			<option th:each="freeDeveloper : ${freeDevelopers}" th:value="${freeDeveloper.id}" th:text="${freeDeveloper.firstname}+ ' ' + ${freeDeveloper.lastname}"></option>
+                    		</select>
+                		</div>
+                	</div>
+				
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label"></label>
+                  <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary">Soumettre</button>
+                  </div>
+                </div>
+
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="card" th:if="${project.projectManager != null}">      <!-- only show this if project has a project manager-->
+        <div class="card-body">
+          <h5 class="card-title" style="color:red" >Supprimer le chef de projet</h5>
+
+          <!-- Default Table -->
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Prénom</th>
+                <th scope="col">Supprimer</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row" th:text="${project.projectManager.id}"></th>
+                <td th:text="${project.projectManager.lastname}">Brandon</td>
+                <td th:text="${project.projectManager.firstname}"> Jacob</td>
+                <td>	<a th:href="@{delete-projectManager?id={id} (id=${project.projectManager.id})}" th:onclick="return confirm('Voulez-vous supprimer le chef de projet?');"><button class="btn btn-danger">Supprimer</button></a>  
+                </td>
+              </tr>       
+              
+            </tbody>
+          </table>
+          <!-- End Default Table Example -->
+        </div>
+      </div>
+
+
+      <!--start of form-->
+
+      <div class="row">
+        <div class="">
+
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">ajouter chef de projet</h5>
+
+              <!-- General Form Elements -->
+              <form th:action="@{/project-added}" method="post" th:object="${project}">
+               	
+                
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label">choisir un chef de projet</label>
+                  <div class="col-sm-10">
+                    <select class="form-select" aria-label="Default select example"  th:field="*{projectManager}" name="projectManager">
+                      <option th:each="projectManager : ${projectManagers}" th:value="${projectManager.id}" th:text="${projectManager.firstname}+ ' ' + ${projectManager.lastname}"></option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label"></label>
+                  <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary">Soumettre</button>
+                  </div>
+                </div>
+
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <!--end of form-->
+
+      
 
   </main><!-- End #main -->
 

@@ -2,6 +2,7 @@ package com.myProject.projectManagementSystem.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,5 +25,16 @@ public class ProjectService {
 	public void addProject(Project project) {
 		projectRepository.save(project); 
 	}
-
+	
+	public void deleteProject(Integer id) {
+		projectRepository.deleteById(id);
+		projectRepository.findById(id);
+	}
+	
+	public Project getProjectById(Integer id) {
+		Optional<Project> optinalProject = projectRepository.findById(id);
+		Project project = optinalProject.get();
+		return project;
+	}
+	
 }

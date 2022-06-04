@@ -2,12 +2,14 @@ package com.myProject.projectManagementSystem.models;
 
 import java.util.Date;
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @MappedSuperclass
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+	@Size(min = 4, message = "Enter atleast 4 Characters!")   
     private String firstname;
     private String lastname;
     private String email;

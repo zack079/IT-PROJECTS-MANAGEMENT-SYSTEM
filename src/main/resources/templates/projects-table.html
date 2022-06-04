@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Tables / Data - NiceAdmin Bootstrap Template</title>
+  <title>Les Projets</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -45,7 +45,7 @@
     <div class="d-flex align-items-center justify-content-between">
       <a href="index.html" class="logo d-flex align-items-center">
         <img src="assets/img/logo.png" alt="">
-        <span class="d-none d-lg-block">NiceAdmin</span>
+        <span class="d-none d-lg-block"></span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
@@ -508,24 +508,26 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Data Tables</h1>
+      <h1>Projets</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item">Tables</li>
-          <li class="breadcrumb-item active">Data</li>
+          
         </ol>
       </nav>
     </div><!-- End Page Title -->
+  
+    <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${projectDeleted}">
+               Le projet a été supprimé!  
+       </div>
 
     <section class="section">
       <div class="row">
         <div class="col-lg-12">
 
-          <div class="card">
+          <div class="card" >
             <div class="card-body">
-              <h5 class="card-title">Datatables</h5>
-              <p>Les projets:</p>
+              <h5 class="card-title">Table des projets</h5>
+              
 
               <!-- Table with stripped rows -->
               <table class="table datatable">
@@ -539,6 +541,8 @@
                     <th scope="col">type</th>
                     <th scope="col">Chef de projet</th>
                     <th scope="col">Dévelopeurs</th>
+                    <th scope="col">Supprimer</th>
+                    <th scope="col">Éditer</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -549,8 +553,18 @@
                     <td th:text="${project.state}"></td>
                     <td th:text="${project.start_date}"></td>
                     <td th:text="${project.type}"></td>
-                    <td th:text="${project.projectID}"></td>
-                    <td th:text="${project.projectID}"></td>
+                    <td th:if="${project.projectManager != null}" th:text="${project.projectManager.firstname}+' ' +${project.projectManager.lastname}"></td>  
+                 	<td th:unless="${project.projectManager != null}"></td>  
+
+                    <td>
+						<a th:each="developer : ${project.developers}" th:if="${developer.project.projectID}==${project.projectID}" th:text="${developer.firstname}+' '+ ${developer.lastname} + ' ,'" th:href="@{developer-page?id={id} (id=${developer.id})}" ></a>
+					</td>
+					<td> 
+						<a th:href="@{delete-project?id={id} (id=${project.projectID})}" th:onclick="return confirm('Voulez-vous supprimer ce projet?');"><button class="btn btn-danger">Supprimer</button></a>  
+					</td>
+					<td> 
+						<a th:href="@{edit-project?id={id} (id=${project.projectID})}" th:onclick="return confirm('Voulez-vous Éditer ce projet?');"><button class="btn btn-primary">Éditer</button></a>  
+					</td>
                   </tr>
                 </tbody>
               </table>
@@ -567,16 +581,7 @@
 
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">
-    <div class="copyright">
-      &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
-    </div>
-    <div class="credits">
-      <!-- All the links in the footer should remain intact. -->
-      <!-- You can delete the links only if you purchased the pro version. -->
-      <!-- Licensing information: https://bootstrapmade.com/license/ -->
-      <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-      Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-    </div>
+    
   </footer><!-- End Footer -->
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
