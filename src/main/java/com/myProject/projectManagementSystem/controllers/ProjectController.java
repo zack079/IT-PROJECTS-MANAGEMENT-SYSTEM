@@ -36,19 +36,8 @@ public class ProjectController {
 	@Autowired
 	private DeveloperService developerService;
 	
-	/****
-	 * handling missing parameters in get requests
-	 * 
-	 * ****/
-	 
-	@ExceptionHandler(MissingServletRequestParameterException.class)
-	public String handleMissingParams(MissingServletRequestParameterException ex) {
-	    String name = ex.getParameterName();
-	    System.out.println("MissingParams:parameter is missing" +name );
-	    // Actual exception handling
-	    return "error";
-	}
-	
+ 
+
 	/*****
 	 * 
 	 * form of creating a project
@@ -119,8 +108,8 @@ public class ProjectController {
 		List<Developer> developers=new ArrayList<>();
 		try {
 			developers = projectService.getProjectById(id).getDevelopers();
-		}catch(Exception e) {
-			e.printStackTrace();
+		}catch(Exception exception) {
+			exception.printStackTrace();
 			return "redirect:projects-table";
 		}
 		for(Developer developer : developers) {
@@ -161,12 +150,13 @@ public class ProjectController {
 			Project project =projectService.getProjectById(id);
 			List<Developer> allDevelopers= developerService.getDevelopers();
 			List<Developer> freeDevelopers = new ArrayList<Developer>();
+			List<ProjectManager> projectManagers = projectManagerService.getProjectManagers();
 			for(Developer developer : allDevelopers) {
 				if(developer.getProject()==null) {
 					freeDevelopers.add(developer);
-					System.out.println(developer);
 				}
 			}
+			model.addAttribute("projectManagers", projectManagers);
 			model.addAttribute("developer",new Developer());
 			model.addAttribute("freeDevelopers",freeDevelopers);
 			model.addAttribute("project",project);
@@ -183,13 +173,37 @@ public class ProjectController {
 	/******
 	 * 
 	 * edited project error page
-	 * in case info of edited project are invalid
+	 * in case info of edited project is invalid
 	 * 
 	 * *******/
 	
 	@GetMapping("/edit-project-error")
-	public String editProjectErrorPage(Model model) {
-		
+	public String editProjectErrorPage(@RequestParam int id,Model model) {
+		try {		
+			//project is retrieved to show other sections other than project info (titre,descrption...)
+			// no need to pass project to model as it's passed as redirectAttribute (to show binding errors)
+			Project project =projectService.getProjectById(id);
+			List<Developer> allDevelopers= developerService.getDevelopers();
+			List<ProjectManager> projectManagers = projectManagerService.getProjectManagers();
+			List<Developer> freeDevelopers = new ArrayList<Developer>();
+			
+			for(Developer developer : allDevelopers) {
+				if(developer.getProject()==null) {
+					freeDevelopers.add(developer);
+				}
+			}
+			
+			/****
+			 * 
+			 */
+			model.addAttribute("projectManagers", projectManagers);
+			model.addAttribute("developer",new Developer());
+			model.addAttribute("freeDevelopers",freeDevelopers);
+			
+		}catch(Exception exception) {
+			exception.printStackTrace();
+			return "redirect:projects-table";
+		}
 		return "edit-project";
 	}
 
@@ -211,7 +225,7 @@ public class ProjectController {
 				editedProject = projectService.getProjectById(project.getProjectID());
 			}catch(Exception e) {
 				e.printStackTrace();
-				return "redirect:error";//it used to be edit-project (don't know why)
+				return "redirect:error";
 			}
 			editedProject.setTitle(project.getTitle());
 			editedProject.setType(project.getType());
@@ -224,14 +238,74 @@ public class ProjectController {
 			redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.project", bindingResult);   
 			redirectAttributes.addFlashAttribute("project",project); 
 			redirectAttributes.addFlashAttribute("projectNotEdited",true);
-			return "redirect:edit-project-error";
+			//pass the project id to be used sections other than project info 
+			return "redirect:edit-project-error?id="+project.getProjectID();
 		}
 		
 		return "redirect:edit-project?id="+project.getProjectID();
 	}
 	
 	
+	/*******
+	 * 
+	 * Handling deleting project manager
+	 * 
+	 */
 	
+	@GetMapping("/delete-projectManager")
+	public String deleteDeveloperFromProject(@RequestParam int id,RedirectAttributes redirectAttributes) {
+		int projectID=id;
+		try {	
+			
+			Project project  = projectService.getProjectById(projectID);
+			
+			if(project.getProjectManager()!=null) {
+				project.setProjectManager(null);
+				redirectAttributes.addFlashAttribute("projectEdited",true);
+				projectService.addProject(project);
+			}else {
+				return "redirect:error";
+			}
+			
+		}catch(Exception exception) {
+			exception.printStackTrace();
+			return "redirect:error";
+		}
+		
+		return "redirect:edit-project?id="+projectID;
+	}
+	
+	/******
+	 * 
+	 * Handling adding a project Manager to a project
+	 * 
+	 */
+	
+	@PostMapping("project-edit-addProjectManager")
+	public String addProjectManagerToProject(@RequestParam int projectID,@RequestParam int projectManager,RedirectAttributes redirectAttributes) {
+		int projectManagerId=projectManager;
+		try {
+			
+			Project project =projectService.getProjectById(projectID);
+			//retrieving project manager by id
+			ProjectManager projectManagerToAdd = projectManagerService.getProjectManagerById(projectManagerId);
+			if(project.getProjectManager()==null) {
+				//assigning project manager to the project
+				project.setProjectManager(projectManagerToAdd);
+				projectService.addProject(project);
+			}
+			
+			redirectAttributes.addFlashAttribute("projectEdited",true);
+		}catch(Exception exception) {
+			exception.printStackTrace();
+			return "redirect:error";
+		}
+		
+		
+		
+		return "redirect:edit-project?id="+projectID;
+		
+	}
 	
 	
 }

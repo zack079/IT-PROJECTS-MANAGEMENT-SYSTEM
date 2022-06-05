@@ -637,13 +637,13 @@
               <h5 class="card-title">Ajouter des developpeurs</h5>
 
               <!-- General Form Elements -->
-              <form th:action="@{/project-edit-addDevelopers}" method="post" th:object="${developer}">      
+              <form th:action="@{/project-edit-addDevelopers}" method="post">      
                  <input type="hidden" th:value="${project.projectID}" name="projectID" />
                  <div class="row mb-3" >
                   	<label class="col-sm-2 col-form-label">Choisir des developpeurs</label>
                   	<div class="col-sm-10" th:if="${#lists.isEmpty(freeDevelopers)}">aucun développeur disponible</div>
                   		<div class="col-sm-10" th:unless="${#lists.isEmpty(freeDevelopers)}" >
-                    		<select class="form-select" multiple aria-label="multiple select example" name="freeDevelopers">
+                    		<select class="form-select" multiple aria-label="multiple select example" name="freeDevelopers" required>
                      			<option th:each="freeDeveloper : ${freeDevelopers}" th:value="${freeDeveloper.id}" th:text="${freeDeveloper.firstname}+ ' ' + ${freeDeveloper.lastname}"></option>
                     		</select>
                 		</div>
@@ -663,7 +663,7 @@
         </div>
       </div>
 
-      <div class="card" th:if="${project.projectManager != null}">      <!-- only show this if project has a project manager-->
+      <div class="card" th:if="${project.projectManager != null}">      <!-- shows only if the project has a project manager-->
         <div class="card-body">
           <h5 class="card-title" style="color:red" >Supprimer le chef de projet</h5>
 
@@ -682,7 +682,7 @@
                 <th scope="row" th:text="${project.projectManager.id}"></th>
                 <td th:text="${project.projectManager.lastname}">Brandon</td>
                 <td th:text="${project.projectManager.firstname}"> Jacob</td>
-                <td>	<a th:href="@{delete-projectManager?id={id} (id=${project.projectManager.id})}" th:onclick="return confirm('Voulez-vous supprimer le chef de projet?');"><button class="btn btn-danger">Supprimer</button></a>  
+                <td>	<a th:href="@{delete-projectManager?id={id} (id=${project.projectID})}" th:onclick="return confirm('Voulez-vous supprimer le chef de projet?');"><button class="btn btn-danger">Supprimer</button></a>  
                 </td>
               </tr>       
               
@@ -693,9 +693,9 @@
       </div>
 
 
-      <!--start of form-->
+      <!--adding a project manager-->
 
-      <div class="row">
+      <div class="row" th:unless="${project.projectManager != null}">  <!-- shows only if the project has NO project manager-->
         <div class="">
 
           <div class="card">
@@ -703,13 +703,14 @@
               <h5 class="card-title">ajouter chef de projet</h5>
 
               <!-- General Form Elements -->
-              <form th:action="@{/project-added}" method="post" th:object="${project}">
+              <form th:action="@{/project-edit-addProjectManager}" method="post">
                	
-                
+                <input type="hidden" th:value="${project.projectID}" name="projectID" />
                 <div class="row mb-3">
                   <label class="col-sm-2 col-form-label">choisir un chef de projet</label>
                   <div class="col-sm-10">
-                    <select class="form-select" aria-label="Default select example"  th:field="*{projectManager}" name="projectManager">
+                    <select class="form-select" aria-label="Default select example" name="projectManager" required>
+                    	<option value="">Selectionner un chef de projet</option>
                       <option th:each="projectManager : ${projectManagers}" th:value="${projectManager.id}" th:text="${projectManager.firstname}+ ' ' + ${projectManager.lastname}"></option>
                     </select>
                   </div>

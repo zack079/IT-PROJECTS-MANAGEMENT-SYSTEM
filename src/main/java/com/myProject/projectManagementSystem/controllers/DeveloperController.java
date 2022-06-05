@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -29,26 +30,63 @@ public class DeveloperController {
 	
 	/********
 	 * 
-	 * deleteing a developer from a project
+	 * deleting a developer from a project
 	 * 
-	 * delete-developer
 	 * 
 	 * ***/
 	
 	
 	@GetMapping("/delete-developer")
-	public String deleteDeveloperFromProject(@RequestParam int id,Model model,RedirectAttributes redirectAttributes) {
-		try {		
+	public String deleteDeveloperFromProject(@RequestParam int id,RedirectAttributes redirectAttributes) {
+		int projectID;
+		try {	
+			
 			Developer developer =developerService.getDeveloperById(id);
-			redirectAttributes.addFlashAttribute("projectEdited",true);
-			developer.setProject(null);
-			developerService.addDeveloper(developer);
+			if(developer.getProject()!=null) {
+				projectID=developer.getProject().getProjectID();
+				redirectAttributes.addFlashAttribute("projectEdited",true);
+				developer.setProject(null);
+				developerService.addDeveloper(developer);
+			}else {
+				return "redirect:error";
+			}
+			
 		}catch(Exception exception) {
 			exception.printStackTrace();
-			return "redirect:projects-table";
+			return "redirect:error";
 		}
 		
-		return "edit-project";
+		return "redirect:edit-project?id="+projectID;
+	}
+	
+	
+	@PostMapping("project-edit-addDevelopers")
+	public String addDevelopersToProject(@RequestParam int projectID,@RequestParam List<Integer> freeDevelopers,RedirectAttributes redirectAttributes) {
+		try {
+			Project project =projectService.getProjectById(projectID);
+			List<Developer> developersToAdd = new ArrayList<Developer>(); 
+			//getting developers by id
+			for(int developerId : freeDevelopers) {
+				Developer developer = developerService.getDeveloperById(developerId);
+				if(developer.getProject()==null) {
+					developersToAdd.add(developer);
+				}
+			}
+			//assigning developers to the project
+			for(Developer developer : developersToAdd) {
+				developer.setProject(project);
+				developerService.addDeveloper(developer);
+			}
+			redirectAttributes.addFlashAttribute("projectEdited",true);
+		}catch(Exception exception) {
+			exception.printStackTrace();
+			return "redirect:error";
+		}
+		
+		
+		
+		return "redirect:edit-project?id="+projectID;
+		
 	}
 
 }
