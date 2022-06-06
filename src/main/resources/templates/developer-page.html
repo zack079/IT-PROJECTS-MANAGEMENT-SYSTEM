@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Ajouter un projet</title>
+  <title>Page développeur</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -39,7 +39,8 @@
 
 <body>
 
-<header id="header" class="header fixed-top d-flex align-items-center">
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
       <a href="index" class="logo d-flex align-items-center">
@@ -48,7 +49,7 @@
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
 
-  
+   
 
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">
@@ -163,111 +164,96 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Projet</h1>
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item">Forms</li>
-          <li class="breadcrumb-item active">Projet</li>
-        </ol>
-      </nav>
+      <h1>Développeur</h1>
     </div><!-- End Page Title -->
-    <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${projectInserted}">
-               Le projet a été inseré!  
-       </div>
-    <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${projectNotInserted}">
-           Erreur d'insertion du projet!
-   	</div>
+    <p></p>
 
+    <section class="section profile">
       <div class="row">
-        <div class="">
+        
+
+        <div class="col-xl-8">
 
           <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Créer un projet</h5>
+            <div class="card-body pt-3">
+              <!-- Bordered Tabs -->
+              <ul class="nav nav-tabs nav-tabs-bordered">
 
-              <!-- General Form Elements -->
-              <form th:action="@{/project-added}" method="post" th:object="${project}">
-                <div class="row mb-3">
-                  <label for="titleId" class="col-sm-2 col-form-label">Titre</label>
-                  <div class="col-sm-10">
-                    <input th:field="*{title}" type="text" id="titleId" name="title" class="form-control" required >
-                    <div class="hibernate-validator-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}" ></div>
-                  
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label for="typeId" class="col-sm-2 col-form-label">Type</label>
-                  <div class="col-sm-10">
-                    <input th:field="*{type}" type="text" id="typeId" name="type" class="form-control" required >
-                    <div class="hibernate-validator-error" th:if="${#fields.hasErrors('type')}" th:errors="*{type}" ></div>
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label for="descriptionId" class="col-sm-2 col-form-label">Description</label>
-                  <div class="col-sm-10">
-                    <textarea class="form-control" id="descriptionId" name ="description"style="height: 100px" required th:field="*{description}"></textarea>
-                  	<div class="hibernate-validator-error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}" ></div>
-                  </div>
-                  <span  ></span>
-                </div>
-                
-                <div class="row mb-3">
-                  <label for="start_dateId" class="col-sm-2 col-form-label">Date de début</label>
-                  <div class="col-sm-10">
-                    <input type="date" id="start_dateId" name="start_date" class="form-control" required th:field="*{start_date}">
-                  </div>
-                </div> 
-                <div class="row mb-3">
-                  <label for="durationId" class="col-sm-2 col-form-label" >Durée (jours)</label>
-                  <div class="col-sm-10">
-                    <input type="number" id="durationId" name="duration" class="form-control" min="0" required th:field="*{duration}">
-                  	<div class="hibernate-validator-error" th:if="${#fields.hasErrors('duration')}" th:errors="*{duration}" ></div>
+                <li class="nav-item">
+                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Information</button>
+                </li>
+
+
+              </ul>
+              <div class="tab-content pt-2">
+
+                <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                 
+                  <h5 class="card-title"></h5>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label ">Nom et prénom</div>
+                    <div class="col-lg-9 col-md-8" th:text="${developer.firstname} + ' ' + ${developer.lastname}"></div>
                   </div>
 
-                </div>
-                
-                
-                 <div class="row mb-3" >
-                  	<label class="col-sm-2 col-form-label">Choisir des developpeurs</label>
-                  	<div class="col-sm-10" th:if="${#lists.isEmpty(developers)}">aucun développeur disponible</div>
-                  		<div class="col-sm-10" th:unless="${#lists.isEmpty(developers)}" >
-                    		<select class="form-select" multiple aria-label="multiple select example" th:field="*{developers}" name="developers">
-                     			<option th:each="developer : ${developers}" th:value="${developer.id}" th:text="${developer.firstname}+ ' ' + ${developer.lastname}"></option>
-                    		</select>
-                		</div>
-                	</div>
-				
-                <div class="row mb-3">
-                  <label class="col-sm-2 col-form-label">choisir un chef de projet</label>
-                  <div class="col-sm-10">
-                    <select class="form-select" aria-label="Default select example"  th:field="*{projectManager}" name="projectManager">
-                      <option th:each="projectManager : ${projectManagers}" th:value="${projectManager.id}" th:text="${projectManager.firstname}+ ' ' + ${projectManager.lastname}"></option>
-                    </select>
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Spécialité</div>
+                    <div class="col-lg-9 col-md-8" th:text="${developer.specialty}"></div>
                   </div>
-                </div>
-				
-                <div class="row mb-3">
-                  <label class="col-sm-2 col-form-label">Soumettre</label>
-                  <div class="col-sm-10">
-                    <button type="submit" class="btn btn-primary">Soumettre</button>
+
+                 
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Address</div>
+                    <div class="col-lg-9 col-md-8" th:text="${developer.address} + ' , ' + ${developer.city}"></div>
                   </div>
+
+             
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Email</div>
+                    <div class="col-lg-9 col-md-8" th:text="${developer.email}"></div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Date de naissance</div>
+                    <div class="col-lg-9 col-md-8" th:text="${developer.dateOfBirth}"></div>
+                  </div>
+					
+					
+				  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Date d'embauche</div>
+                    <div class="col-lg-9 col-md-8" th:text="${developer.employment_date}"></div>
+                  </div>	
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Projet actuelle</div>
+                    <div class="col-lg-9 col-md-8" th:text="${developer.project.title} + ' (ID :' +${developer.project.projectID} + ' )'"></div>
+                  </div>
+
+
+
+
                 </div>
 
-              </form>
+             
+              </div><!-- End Bordered Tabs -->
+
             </div>
           </div>
 
         </div>
       </div>
+    </section>
 
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">
+    <div class="copyright">
+     
     <div class="credits">
-      <!-- All the links in the footer should remain intact. -->
-      <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+
     </div>
   </footer><!-- End Footer -->
 

@@ -88,5 +88,37 @@ public class DeveloperController {
 		return "redirect:edit-project?id="+projectID;
 		
 	}
+	
+	
+	
+	@GetMapping("developer-page")
+	public String getDeveloperPage(@RequestParam int id,Model model) {
+		int DeveloperID=id;
+		try {
+			Developer developer = developerService.getDeveloperById(DeveloperID);
+			model.addAttribute("developer", developer);
+			
+		}catch(Exception exception) {
+			exception.printStackTrace();
+			return "redirect:error";
+		}
+		
+		
+		return "developer-page";
+		
+	}
+	
+	
+	
+	@GetMapping("developers-table")
+	public String getDeveloperTablePage(Model model) {
+	
+		List<Developer> developers = developerService.getDevelopers();
+		
+		model.addAttribute("developers", developers);
+	
+		return "developers-table";
+		
+	}
 
 }
