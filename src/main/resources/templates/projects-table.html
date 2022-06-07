@@ -54,8 +54,7 @@
       <ul class="d-flex align-items-center">
 
         <li class="nav-item d-block d-lg-none">
-          <a class="nav-link nav-icon search-bar-toggle " href="#">
-            <i class="bi bi-search"></i>
+         
           </a>
         </li><!-- End Search Icon-->
 
@@ -155,6 +154,13 @@
 		      <span>Statistique</span>
 		    </a>
 		  </li>	  
+		  
+		  <li class="nav-item">
+		    <a class="nav-link collapsed" th:href="@{/old-projects-table}">
+		      <i class="bi bi-archive"></i>
+		      <span>Archive des projets</span>
+		    </a>
+		  </li>	 
 
     </ul>
 
@@ -164,11 +170,7 @@
 
     <div class="pagetitle">
       <h1>Projets</h1>
-      <nav>
-        <ol class="breadcrumb">
-          
-        </ol>
-      </nav>
+    
     </div><!-- End Page Title -->
   
     <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${projectDeleted}">
@@ -198,6 +200,7 @@
                     <th scope="col">Dévelopeurs</th>
                     <th scope="col">Supprimer</th>
                     <th scope="col">Éditer</th>
+                    <th scope="col">Terminer</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -215,10 +218,13 @@
 						<a th:each="developer : ${project.developers}" th:if="${developer.project.projectID}==${project.projectID}" th:text="${developer.firstname}+' '+ ${developer.lastname} + ' ,'" th:href="@{developer-page?id={id} (id=${developer.id})}" ></a>
 					</td>
 					<td> 
-						<a th:href="@{delete-project?id={id} (id=${project.projectID})}" th:onclick="return confirm('Voulez-vous supprimer ce projet?');"><button class="btn btn-danger">Supprimer</button></a>  
+						<a th:href="@{delete-project?id={id} (id=${project.projectID})}" th:onclick="return confirm('Voulez-vous supprimer ce projet?');"><button class="btn btn-outline-danger">Supprimer</button></a>  
 					</td>
 					<td> 
-						<a th:href="@{edit-project?id={id} (id=${project.projectID})}" th:onclick="return confirm('Voulez-vous Éditer ce projet?');"><button class="btn btn-primary">Éditer</button></a>  
+						<a th:href="@{edit-project?id={id} (id=${project.projectID})}" th:onclick="return confirm('Voulez-vous Éditer ce projet?');"><button class="btn btn-outline-primary">Éditer</button></a>  
+					</td>
+					<td> 
+						<a th:href="@{finish-project?id={id} (id=${project.projectID})}" th:onclick="return confirm('Voulez-vous terminer ce projet?');"><button class="btn btn-outline-success">Terminer</button></a>  
 					</td>
                   </tr>
                 </tbody>

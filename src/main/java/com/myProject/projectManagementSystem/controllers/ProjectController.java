@@ -1,5 +1,6 @@
 package com.myProject.projectManagementSystem.controllers;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -79,6 +80,7 @@ public class ProjectController {
 		if(!bindingResult.hasErrors()) {
 			redirectAttributes.addFlashAttribute("projectInserted",true);
 			project.setState("en cours");
+			project.setProjectFinished(false);
 			projectService.addProject(project);
 			for(Developer developer : project.getDevelopers()) {
 				developer.setProject(project);
@@ -112,6 +114,7 @@ public class ProjectController {
 			exception.printStackTrace();
 			return "redirect:projects-table";
 		}
+		
 		for(Developer developer : developers) {
 			developer.setProject(null);
 			developerService.addDeveloper(developer);
@@ -130,8 +133,15 @@ public class ProjectController {
 	
 	@GetMapping("/projects-table")
 	public String getProjectsPage(Model model) {
-		List<Project> projects= projectService.getProjects();
-		model.addAttribute("projects",projects);
+		List<Project> allProjects= projectService.getProjects();
+		List<Project> currentProjects=new ArrayList<Project>();
+		
+		for(Project project : allProjects) {
+			if(!project.getProjectFinished()) {
+				currentProjects.add(project);
+			}
+		}
+		model.addAttribute("projects",currentProjects);
 		return "projects-table";
 	}
 	
@@ -148,6 +158,9 @@ public class ProjectController {
 	public String editProjectPage(@RequestParam int id,Model model) {
 		try {		
 			Project project =projectService.getProjectById(id);
+			if(project.getProjectFinished()) {
+				throw new Exception();
+			}
 			List<Developer> allDevelopers= developerService.getDevelopers();
 			List<Developer> freeDevelopers = new ArrayList<Developer>();
 			List<ProjectManager> projectManagers = projectManagerService.getProjectManagers();
@@ -156,6 +169,16 @@ public class ProjectController {
 					freeDevelopers.add(developer);
 				}
 			}
+			
+			/**TEST**/
+			for(Developer developer : project.getDevelopers()) {
+				System.out.println(developer);
+			}
+			
+			
+			
+			/**END TEST**/
+			
 			model.addAttribute("projectManagers", projectManagers);
 			model.addAttribute("developer",new Developer());
 			model.addAttribute("freeDevelopers",freeDevelopers);
@@ -305,6 +328,50 @@ public class ProjectController {
 		
 		return "redirect:edit-project?id="+projectID;
 		
+	}
+	
+	/*********
+	 * 
+	 * Handling finishing a project
+	 * 
+	 */
+	
+	@GetMapping("/finish-project")
+	public String finishingProject(@RequestParam int id,RedirectAttributes redirectAttributes) {
+		int projectID=id;
+		try {	
+			Project project = projectService.getProjectById(projectID);
+			project.setProjectFinished(true);
+			project.setEnd_date(new Date());
+			projectService.addProject(project);
+		}catch(Exception exception) {
+			exception.printStackTrace();
+			return "redirect:error";
+		}
+		return "redirect:projects-table";
+	}
+	
+	
+	
+	
+	/***********
+	 * 
+	 * 
+	 * showing finished projects table
+	 * 
+	 */
+	@GetMapping("/old-projects-table")
+	public String getOldProjectsTable(Model model) {
+		List<Project> allProjects= projectService.getProjects();
+		List<Project> finishedProjects=new ArrayList<Project>();
+		
+		for(Project project : allProjects) {
+			if(project.getProjectFinished()) {
+				finishedProjects.add(project);
+			}
+		}
+		model.addAttribute("projects",finishedProjects);
+		return "old-projects-table";
 	}
 	
 	

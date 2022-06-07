@@ -33,12 +33,7 @@ public class TestController {
 	/*****TEST***/
 	@GetMapping("/test")
 	public String test() {
-		List<Demand> demands= demandService.getDemands();
-		if(demands.isEmpty()) {
-			System.out.println("it's empty");
-		}else {
-			System.out.println("t");
-		}
+		
 		return "test";
 	}
 	

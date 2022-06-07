@@ -2,6 +2,9 @@ package com.myProject.projectManagementSystem.models;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,6 +17,17 @@ public class Developer extends User{
     private Project project;
     @OneToMany(mappedBy = "developer")
     private List<Demand> demands=new ArrayList<Demand>();
+    //TODO: problem when `fetch` was `FetchType.EAGER` 
+    /*******
+     * when developers of a project are fetched in `edit-project.html`
+     * the query of `select developer from developer where projectid=?` gets executed the amount
+     * of objects stored in oldProjects.
+     *  
+     *****/
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<Project> oldProjects = new ArrayList<Project>();
+    
+    
     public Developer(){
 
     }
@@ -61,8 +75,17 @@ public class Developer extends User{
     public void setEmployment_date(Date employment_date) {
         this.employment_date = employment_date;
     }
+    
 
-    @Override
+    public List<Project> getOldProjects() {
+		return oldProjects;
+	}
+
+	public void setOldProjects(List<Project> oldProjects) {
+		this.oldProjects = oldProjects;
+	}
+
+	@Override
     public String toString() {
         return super.toString()+
                 "specialty=" + specialty  +

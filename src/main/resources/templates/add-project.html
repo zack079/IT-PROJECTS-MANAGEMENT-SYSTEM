@@ -54,9 +54,7 @@
       <ul class="d-flex align-items-center">
 
         <li class="nav-item d-block d-lg-none">
-          <a class="nav-link nav-icon search-bar-toggle " href="#">
-            <i class="bi bi-search"></i>
-          </a>
+        
         </li><!-- End Search Icon-->
 
         
@@ -155,6 +153,13 @@
 		      <span>Statistique</span>
 		    </a>
 		  </li>	  
+		  
+		  <li class="nav-item">
+		    <a class="nav-link collapsed" th:href="@{/old-projects-table}">
+		      <i class="bi bi-archive"></i>
+		      <span>Archive des projets</span>
+		    </a>
+		  </li>	 
 
     </ul>
 
@@ -164,13 +169,7 @@
 
     <div class="pagetitle">
       <h1>Projet</h1>
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item">Forms</li>
-          <li class="breadcrumb-item active">Projet</li>
-        </ol>
-      </nav>
+     
     </div><!-- End Page Title -->
     <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${projectInserted}">
                Le projet a été inseré!  
@@ -191,7 +190,7 @@
                 <div class="row mb-3">
                   <label for="titleId" class="col-sm-2 col-form-label">Titre</label>
                   <div class="col-sm-10">
-                    <input th:field="*{title}" type="text" id="titleId" name="title" class="form-control" required >
+                    <input th:field="*{title}" type="text" id="titleId" name="title" class="form-control" required minlength="4">
                     <div class="hibernate-validator-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}" ></div>
                   
                   </div>
@@ -232,7 +231,7 @@
                   	<label class="col-sm-2 col-form-label">Choisir des developpeurs</label>
                   	<div class="col-sm-10" th:if="${#lists.isEmpty(developers)}">aucun développeur disponible</div>
                   		<div class="col-sm-10" th:unless="${#lists.isEmpty(developers)}" >
-                    		<select class="form-select" multiple aria-label="multiple select example" th:field="*{developers}" name="developers">
+                    		<select class="form-select" multiple aria-label="multiple select example" th:field="*{developers}" name="developers" required>
                      			<option th:each="developer : ${developers}" th:value="${developer.id}" th:text="${developer.firstname}+ ' ' + ${developer.lastname}"></option>
                     		</select>
                 		</div>
@@ -241,7 +240,9 @@
                 <div class="row mb-3">
                   <label class="col-sm-2 col-form-label">choisir un chef de projet</label>
                   <div class="col-sm-10">
-                    <select class="form-select" aria-label="Default select example"  th:field="*{projectManager}" name="projectManager">
+                    <select class="form-select" aria-label="Default select example"  th:field="*{projectManager}" name="projectManager" required>
+                   	<option value="">Selectionner un chef de projet</option>
+
                       <option th:each="projectManager : ${projectManagers}" th:value="${projectManager.id}" th:text="${projectManager.firstname}+ ' ' + ${projectManager.lastname}"></option>
                     </select>
                   </div>

@@ -31,12 +31,14 @@ public class Project {
     private Director director;
     @OneToMany(fetch = FetchType.EAGER,mappedBy = "project")
     private List<Developer> developers=new ArrayList<Developer>();
+    private Boolean projectFinished;
 
     public Project(){
 
     }
     public Project(String title, String description, String type, Date start_date, String state, int duration, ProjectManager projectManager, ArrayList<Developer> developers, Director director) {
-        this.title = title;
+    	projectFinished=false;
+    	this.title = title;
         this.description = description;
         this.type = type;
         this.start_date = start_date;
@@ -47,7 +49,8 @@ public class Project {
         this.director = director;
     }
     public Project(String title, String description, String type, Date start_date, String state, int duration, ProjectManager projectManager, Director director) {
-        this.title = title;
+    	projectFinished=false;
+    	this.title = title;
         this.description = description;
         this.type = type;
         this.start_date = start_date;
@@ -149,7 +152,24 @@ public class Project {
         this.duration = duration;
     }
 
-    public void addDeveloper(Developer developer) {
+    
+	public Boolean getProjectFinished() {
+		return projectFinished;
+	}
+	public void setProjectFinished(Boolean projectFinished) {
+		//this is done when the project is finished
+		if(projectFinished) {
+			//removing the developers that are working on this project
+			//and moving this project to their history
+			for(Developer developer: developers) {
+				//adding the project to history of the developer
+				developer.getOldProjects().add(developer.getProject());
+				developer.setProject(null);
+			}
+		}
+		this.projectFinished = projectFinished;
+	}
+	public void addDeveloper(Developer developer) {
         developers.add(developer);
     }
     @Override
