@@ -4,11 +4,14 @@ import java.util.Date;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Size(min = 4, message = "Enter atleast 4 Characters!")   
+    private String username;
 	@Size(min = 4, message = "Enter atleast 4 Characters!")   
     private String firstname;
     private String lastname;
@@ -98,4 +101,11 @@ public class User {
 	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
 }

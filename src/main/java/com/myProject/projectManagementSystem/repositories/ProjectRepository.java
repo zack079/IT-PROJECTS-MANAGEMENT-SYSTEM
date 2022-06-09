@@ -8,6 +8,6 @@ import com.myProject.projectManagementSystem.models.Project;
 
 
 @Repository
-public interface ProjectRepository extends CrudRepository<Project, Integer> {
+public interface ProjectRepository extends JpaRepository<Project, Integer> {
 	 
 }

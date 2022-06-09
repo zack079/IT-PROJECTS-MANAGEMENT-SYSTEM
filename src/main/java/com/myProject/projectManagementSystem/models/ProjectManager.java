@@ -60,8 +60,8 @@ public class ProjectManager extends User{
 
     @Override
     public String toString() {
-        return super.toString()+
-                ", employment_date=" + employment_date
+        return "Project manager {" +
+                ", employment_date=" + employment_date+super.toString()
                 ;
     }
 }

@@ -87,9 +87,9 @@ public class Developer extends User{
 
 	@Override
     public String toString() {
-        return super.toString()+
+        return "Developer { "+
                 "specialty=" + specialty  +
-                ", employment_date=" + employment_date
+                ", employment_date=" + employment_date +super.toString()
                 ;
     }
 }

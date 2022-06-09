@@ -38,132 +38,9 @@
 </head>
 
 <body>
-
-<header id="header" class="header fixed-top d-flex align-items-center">
-
-    <div class="d-flex align-items-center justify-content-between">
-      <a href="index" class="logo d-flex align-items-center">
-        <img src="assets/img/logo.png" alt="">
-      </a>
-      <i class="bi bi-list toggle-sidebar-btn"></i>
-    </div><!-- End Logo -->
-
-  
-
-    <nav class="header-nav ms-auto">
-      <ul class="d-flex align-items-center">
-
-        <li class="nav-item d-block d-lg-none">
-        
-        </li><!-- End Search Icon-->
-
-        
-
-        <li class="nav-item dropdown pe-3">
-
-          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-            <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
-          </a><!-- End Profile Iamge Icon -->
-
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-            <li class="dropdown-header">
-              <h6>Kevin Anderson</h6>
-              <span>Web Designer</span>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-                <i class="bi bi-person"></i>
-                <span>My Profile</span>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-                <i class="bi bi-gear"></i>
-                <span>Account Settings</span>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
-                <i class="bi bi-question-circle"></i>
-                <span>Need Help?</span>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="#">
-                <i class="bi bi-box-arrow-right"></i>
-                <span>Sign Out</span>
-              </a>
-            </li>
-
-          </ul><!-- End Profile Dropdown Items -->
-        </li><!-- End Profile Nav -->
-
-      </ul>
-    </nav><!-- End Icons Navigation -->
-
-  </header><!-- End Header -->
-
-  <!-- ======= Sidebar ======= -->
-  <aside id="sidebar" class="sidebar">
-
-    <ul class="sidebar-nav" id="sidebar-nav">
-    
-       <li class="nav-item">
-		    <a class="nav-link collapsed"  th:href="@{/projects-table}">
-		      <i class="bi bi-list-ul"></i>
-		      <span>Voir les projets</span>
-		    </a>
-		  </li>
-		  
-    
-    	 <li class="nav-item">
-		    <a class="nav-link collapsed" th:href="@{/add-project}">
-		      <i class="bi bi-plus-square-dotted"></i>
-		      <span>Créer un projet</span>
-		    </a>
-		  </li>
-		  
-		  <li class="nav-item">
-		    <a class="nav-link collapsed"  th:href="@{/developers-table}">
-		      <i class="bi bi-person-lines-fill"></i>
-		      <span>Voir les développeurs</span>
-		    </a>
-		  </li>
-		  
-	 	<li class="nav-item">
-		    <a class="nav-link collapsed" th:href="@{/}">
-		      <i class="bi bi-bar-chart"></i>
-		      <span>Statistique</span>
-		    </a>
-		  </li>	  
-		  
-		  <li class="nav-item">
-		    <a class="nav-link collapsed" th:href="@{/old-projects-table}">
-		      <i class="bi bi-archive"></i>
-		      <span>Archive des projets</span>
-		    </a>
-		  </li>	 
-
-    </ul>
-
-  </aside><!-- End Sidebar-->
+	<div th:replace="header.html"></div>
+	<div th:replace="sidebar.html"></div>
+	
 
   <main id="main" class="main">
 
@@ -205,7 +82,7 @@
                 <div class="row mb-3">
                   <label for="descriptionId" class="col-sm-2 col-form-label">Description</label>
                   <div class="col-sm-10">
-                    <textarea class="form-control" id="descriptionId" name ="description"style="height: 100px" required th:field="*{description}"></textarea>
+                    <textarea class="form-control" id="descriptionId" name ="description"style="height: 100px" required th:field="*{description}" minlength="10"></textarea>
                   	<div class="hibernate-validator-error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}" ></div>
                   </div>
                   <span  ></span>
@@ -231,7 +108,7 @@
                   	<label class="col-sm-2 col-form-label">Choisir des developpeurs</label>
                   	<div class="col-sm-10" th:if="${#lists.isEmpty(developers)}">aucun développeur disponible</div>
                   		<div class="col-sm-10" th:unless="${#lists.isEmpty(developers)}" >
-                    		<select class="form-select" multiple aria-label="multiple select example" th:field="*{developers}" name="developers" required>
+                    		<select class="form-select" multiple aria-label="multiple select example" th:field="*{developers}" name="developers">
                      			<option th:each="developer : ${developers}" th:value="${developer.id}" th:text="${developer.firstname}+ ' ' + ${developer.lastname}"></option>
                     		</select>
                 		</div>
@@ -240,7 +117,7 @@
                 <div class="row mb-3">
                   <label class="col-sm-2 col-form-label">choisir un chef de projet</label>
                   <div class="col-sm-10">
-                    <select class="form-select" aria-label="Default select example"  th:field="*{projectManager}" name="projectManager" required>
+                    <select class="form-select" aria-label="Default select example"  th:field="*{projectManager}" name="projectManager">
                    	<option value="">Selectionner un chef de projet</option>
 
                       <option th:each="projectManager : ${projectManagers}" th:value="${projectManager.id}" th:text="${projectManager.firstname}+ ' ' + ${projectManager.lastname}"></option>
