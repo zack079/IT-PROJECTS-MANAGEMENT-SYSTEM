@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Les Projets</title>
+  <title>Page chefs de projet</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -29,80 +29,45 @@
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
 
-  <!-- =======================================================
-  * Template Name: NiceAdmin - v2.2.2
-  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
+  
 </head>
 
 <body>
-
 <div th:replace="header.html"></div>
 <div th:replace="sidebar.html"></div>
+
 
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Projets</h1>
-    
+      <h1>Chefs de projet</h1>
     </div><!-- End Page Title -->
-  
-    <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${projectDeleted}">
-               Le projet a été supprimé!  
-       </div>
 
     <section class="section">
       <div class="row">
         <div class="col-lg-12">
 
-          <div class="card" >
+          <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Table des projets</h5>
+              <h5 class="card-title">Table des chefs de projet</h5>
               
-
               <!-- Table with stripped rows -->
               <table class="table datatable">
                 <thead>
                   <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Titre</th>
-                    <th scope="col">Déscription</th>
-                    <th scope="col">Etat</th>
-                    <th scope="col">date de début</th>
-                    <th scope="col">type</th>
-                    <th scope="col">Chef de projet</th>
-                    <th scope="col">Dévelopeurs</th>
-                    <th scope="col" sec:authorize="hasRole('DIRECTOR')">Supprimer</th>
-                    <th scope="col">Éditer</th>
-                    <th scope="col">Terminer</th>
+                    <th scope="col">#</th>
+                    <th scope="col">Nom et Prénom</th>
+                    <th scope="col">plus de détails	</th>
                   </tr>
                 </thead>
                 <tbody>
-               <tr th:each="project:${projects}">
-                    <th scope="row" th:text="${project.projectID}"></th>
-                    <td th:text="${project.title}"></td>
-                    <td th:text="${project.description}"></td>
-                    <td th:text="${project.state}"></td>
-                    <td th:text="${project.start_date}"></td>
-                    <td th:text="${project.type}"></td>
-                   
-					<td>
-						<a th:if="${project.projectManager != null}" th:text="${project.projectManager.firstname}+' ' +${project.projectManager.lastname}" th:href="@{project-manager-page?id={id} (id=${project.projectManager.id})}" ></a>
-					</td>
+                  <tr th:each="projectManager : ${projectManagers}">
+                    <th scope="row" th:text="${projectManager.id}"></th>
+                    <td th:text="${projectManager.firstname} + ' ' + ${projectManager.lastname}"></td>
+                    
                     <td>
-						<a th:each="developer : ${project.developers}" th:if="${developer.project.projectID}==${project.projectID}" th:text="${developer.firstname}+' '+ ${developer.lastname} + ' ,'" th:href="@{developer-page?id={id} (id=${developer.id})}" ></a>
-					</td>
-					<td sec:authorize="hasRole('DIRECTOR')"> 
-						<a th:href="@{delete-project?id={id} (id=${project.projectID})}" th:onclick="return confirm('Voulez-vous supprimer ce projet?');"><button class="btn btn-outline-danger" >Supprimer</button></a>  
-					</td>
-					<td> 
-						<a th:href="@{edit-project?id={id} (id=${project.projectID})}" th:onclick="return confirm('Voulez-vous Éditer ce projet?');"><button class="btn btn-outline-primary">Éditer</button></a>  
-					</td>
-					<td> 
-						<a th:href="@{finish-project?id={id} (id=${project.projectID})}" th:onclick="return confirm('Voulez-vous terminer ce projet?');"><button class="btn btn-outline-success">Terminer</button></a>  
-					</td>
+                    	<a th:href="@{project-manager-page?id={id} (id=${projectManager.id})}" class="bi bi-link" >  </a> 
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -119,7 +84,11 @@
 
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">
-    
+    <div class="copyright">
+    </div>
+    <div class="credits">
+   
+    </div>
   </footer><!-- End Footer -->
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>

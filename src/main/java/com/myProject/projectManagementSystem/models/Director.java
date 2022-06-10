@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 public class Director extends User{
-    @OneToMany(mappedBy = "director")
+    @OneToMany(mappedBy = "director",fetch = FetchType.EAGER)
     private List<Project> projects=new ArrayList<Project>();
     public Director(){
 

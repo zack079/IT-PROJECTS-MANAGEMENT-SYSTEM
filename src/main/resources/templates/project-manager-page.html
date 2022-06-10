@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Page développeur</title>
+  <title>Page chef de projet</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -29,12 +29,7 @@
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
 
-  <!-- =======================================================
-  * Template Name: NiceAdmin - v2.2.2
-  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
+
 </head>
 
 <body>
@@ -46,7 +41,7 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Page de développeur</h1>
+      <h1>Page de chef de projet</h1>
     </div><!-- End Page Title -->
     <p></p>
 
@@ -75,55 +70,56 @@
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label ">Nom et prénom</div>
-                    <div class="col-lg-9 col-md-8" th:text="${developer.firstname} + ' ' + ${developer.lastname}"></div>
+                    <div class="col-lg-9 col-md-8" th:text="${projectManager.firstname} + ' ' + ${projectManager.lastname}"></div>
                   </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Spécialité</div>
-                    <div class="col-lg-9 col-md-8" th:text="${developer.specialty}"></div>
-                  </div>
-
                  
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Address</div>
-                    <div class="col-lg-9 col-md-8" th:text="${developer.address} + ' , ' + ${developer.city}"></div>
+                    <div class="col-lg-9 col-md-8" th:text="${projectManager.address} + ' , ' + ${projectManager.city}"></div>
                   </div>
 
              
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Email</div>
-                    <div class="col-lg-9 col-md-8" th:text="${developer.email}"></div>
+                    <div class="col-lg-9 col-md-8" th:text="${projectManager.email}"></div>
                   </div>
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Date de naissance</div>
-                    <div class="col-lg-9 col-md-8" th:text="${developer.dateOfBirth}"></div>
+                    <div class="col-lg-9 col-md-8" th:text="${projectManager.dateOfBirth}"></div>
                   </div>
 					
 					
 				  <div class="row">
                     <div class="col-lg-3 col-md-4 label">Date d'embauche</div>
-                    <div class="col-lg-9 col-md-8" th:text="${developer.employment_date}"></div>
+                    <div class="col-lg-9 col-md-8" th:text="${projectManager.employment_date}"></div>
                   </div>	
 
-                  <div class="row" th:if="${developer.project}  != null">
-                    <div class="col-lg-3 col-md-4 label">Projet actuelle</div>
-                    <div class="col-lg-9 col-md-8" th:text="${developer.project.title} + ' (ID :' +${developer.project.projectID} + ' )'" 
-                    ></div>
-                  </div>
- 
+
                   
-                  <div class="row" th:unless="${#lists.isEmpty(developer.oldProjects)}">
-                    <div class="col-lg-3 col-md-4 label">Projet développé</div>
+                  <div class="row" th:unless="${#lists.isEmpty(projectManager.projects)}">
+                    <div class="col-lg-3 col-md-4 label">Projets actuelles</div>
                     <div class="col-lg-9 col-md-8">
-                    <span  th:each="oldProject : ${developer.oldProjects}" th:text="${oldProject.title} + ' (ID: ' + ${oldProject.projectID} + ')'+' , '"
+                    <span  	th:each="project : ${projectManager.projects}" 
+                    		th:text="${project.title} + ' (ID: ' + ${project.projectID} + ')'+' , '" 
+                    		th:unless="${project.projectFinished}"
                     ></span>
-                    </div>
+                   	</div>
                     
                   </div>
-
+				
+				<div class="row" th:unless="${#lists.isEmpty(projectManager.projects)}">
+                    <div class="col-lg-3 col-md-4 label">Projets gérée</div>
+                    <div class="col-lg-9 col-md-8">
+                    <span  	th:each="project : ${projectManager.projects}" 
+                    		th:text="${project.title} + ' (ID: ' + ${project.projectID} + ')'+' , '" 
+                    		th:if="${project.projectFinished}"
+                    ></span>
+                   	</div>
+                    
+                 </div>
 
                 </div>
 

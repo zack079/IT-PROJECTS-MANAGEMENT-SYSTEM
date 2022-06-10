@@ -61,7 +61,7 @@
    	
      <!--start of form of editing a project-->
 	
-      <div class="row">
+      <div class="row" sec:authorize="hasRole('DIRECTOR')">
         <div class="">
 
           <div class="card">
@@ -201,12 +201,12 @@
         </div>
       </div>
 
-      <div class="card" th:if="${project.projectManager != null}">      <!-- shows only if the project has a project manager-->
+      <div class="card" th:if="${project.projectManager != null}" sec:authorize="hasRole('DIRECTOR')">      <!-- shows only if the project has a project manager-->
         <div class="card-body">
           <h5 class="card-title" style="color:red" >Supprimer le chef de projet</h5>
 
           <!-- Default Table -->
-          <table class="table">
+          <table class="table" sec:authorize="hasRole('DIRECTOR')">
             <thead>
               <tr>
                 <th scope="col">#</th>

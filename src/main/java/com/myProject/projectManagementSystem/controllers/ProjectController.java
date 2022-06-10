@@ -6,6 +6,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,11 +21,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.myProject.projectManagementSystem.models.Developer;
+import com.myProject.projectManagementSystem.models.Director;
 import com.myProject.projectManagementSystem.models.Project;
 import com.myProject.projectManagementSystem.models.ProjectManager;
+import com.myProject.projectManagementSystem.models.User;
+import com.myProject.projectManagementSystem.security.UserPrincipal;
 import com.myProject.projectManagementSystem.services.DeveloperService;
 import com.myProject.projectManagementSystem.services.ProjectManagerService;
 import com.myProject.projectManagementSystem.services.ProjectService;
+import com.myProject.projectManagementSystem.services.UserService;
 
 
 @Controller
@@ -37,7 +42,10 @@ public class ProjectController {
 	@Autowired
 	private DeveloperService developerService;
 	
- 
+	@Autowired
+	private UserService userService;
+	//
+	
 
 	/*****
 	 * 
@@ -76,11 +84,18 @@ public class ProjectController {
 	
 	@PostMapping("/project-added")
 	public String addProject(@Valid @ModelAttribute("project") Project project,BindingResult bindingResult,RedirectAttributes redirectAttributes) {
-		
+		//getting the logged in user
+		int userID=((UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser().getId();
+		User user=userService.getUserById(userID);
+		Director director=null;
+		if(user instanceof Director) {
+			director =(Director) user;
+		}
 		if(!bindingResult.hasErrors()) {
 			redirectAttributes.addFlashAttribute("projectInserted",true);
 			project.setState("en cours");
 			project.setProjectFinished(false);
+			project.setDirector(director);
 			projectService.addProject(project);
 			for(Developer developer : project.getDevelopers()) {
 				developer.setProject(project);
@@ -130,10 +145,24 @@ public class ProjectController {
 	/*****
 	 * showing projects
 	 * ******/
+	//TODO: check if showing a director's projects creates a problem or not(no bugs till now)
 	
 	@GetMapping("/projects-table")
 	public String getProjectsPage(Model model) {
-		List<Project> allProjects= projectService.getProjects();
+		int userID=((UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser().getId();
+		User user=userService.getUserById(userID);
+		Director director=null;
+		ProjectManager projectManger=null;
+		List<Project> allProjects=new ArrayList<Project>();
+		if(user instanceof Director) {
+			director =(Director) user;
+			allProjects=director.getProjects();
+		}else if(user instanceof ProjectManager) {
+			projectManger=(ProjectManager)user;
+			allProjects=projectManger.getProjects();
+		}
+		
+		//List<Project> allProjects= projectService.getProjects();
 		List<Project> currentProjects=new ArrayList<Project>();
 		
 		for(Project project : allProjects) {
@@ -153,11 +182,27 @@ public class ProjectController {
 	 * 
 	 * 
 	 * ******/
-
+	//TODO: add the possibility to change projects's states for project managers.
+	
 	@GetMapping("/edit-project")
 	public String editProjectPage(@RequestParam int id,Model model) {
 		try {		
 			Project project =projectService.getProjectById(id);
+			int userID=((UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser().getId();
+			User user=userService.getUserById(userID);
+			ProjectManager projectManager=null;
+			if(user instanceof ProjectManager) {
+				projectManager=(ProjectManager)user;
+				//in case the logged project manager doesn't manage the selected project an exception is thrown
+				if(!projectManager.getProjects().contains(project)) {
+					throw new Exception();
+				}
+			}else {
+				//the user is a director
+			}
+			
+			
+			//in case the passed project is finished
 			if(project.getProjectFinished()) {
 				throw new Exception();
 			}
@@ -170,14 +215,7 @@ public class ProjectController {
 				}
 			}
 			
-			/**TEST**/
-			for(Developer developer : project.getDevelopers()) {
-				System.out.println(developer);
-			}
-			
-			
-			
-			/**END TEST**/
+		
 			
 			model.addAttribute("projectManagers", projectManagers);
 			model.addAttribute("developer",new Developer());
@@ -186,7 +224,7 @@ public class ProjectController {
 			
 		}catch(Exception exception) {
 			exception.printStackTrace();
-			return "redirect:projects-table";
+			return "redirect:error";
 		}
 		
 		return "edit-project";
@@ -338,9 +376,25 @@ public class ProjectController {
 	
 	@GetMapping("/finish-project")
 	public String finishingProject(@RequestParam int id,RedirectAttributes redirectAttributes) {
+		
+		
 		int projectID=id;
 		try {	
+			//if a project manager is logged in,he can only finish projects that he manages
 			Project project = projectService.getProjectById(projectID);
+			int userID=((UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser().getId();
+			User user=userService.getUserById(userID);
+			ProjectManager projectManager=null;
+			if(user instanceof ProjectManager) {
+				projectManager=(ProjectManager)user;
+				//in case the logged project manager doesn't manage the selected project an exception is thrown
+				if(!projectManager.getProjects().contains(project)) {
+					throw new Exception();
+				}
+			}else {
+				//the user is a director
+			}
+
 			project.setProjectFinished(true);
 			project.setEnd_date(new Date());
 			projectService.addProject(project);

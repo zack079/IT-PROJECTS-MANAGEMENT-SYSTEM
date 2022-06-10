@@ -13,7 +13,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.myProject.projectManagementSystem.models.Developer;
 import com.myProject.projectManagementSystem.models.Project;
 import com.myProject.projectManagementSystem.services.DeveloperService;
-import com.myProject.projectManagementSystem.services.ProjectManagerService;
 import com.myProject.projectManagementSystem.services.ProjectService;
 
 @Controller
@@ -23,8 +22,7 @@ public class DeveloperController {
 	
 	@Autowired
 	private ProjectService projectService;
-	@Autowired
-	private ProjectManagerService projectManagerService;
+
 	@Autowired
 	private DeveloperService developerService;
 	
@@ -59,6 +57,11 @@ public class DeveloperController {
 		return "redirect:edit-project?id="+projectID;
 	}
 	
+	/******
+	 * 
+	 * add developer to a project
+	 * 
+	 */
 	
 	@PostMapping("project-edit-addDevelopers")
 	public String addDevelopersToProject(@RequestParam int projectID,@RequestParam List<Integer> freeDevelopers,RedirectAttributes redirectAttributes) {

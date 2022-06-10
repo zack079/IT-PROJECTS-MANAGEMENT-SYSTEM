@@ -1,5 +1,6 @@
 package com.myProject.projectManagementSystem.security;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -20,13 +21,35 @@ public class UserPrincipal implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return  Collections.singleton(new SimpleGrantedAuthority("USER"));
+		String ROLE= user.getClass().getSimpleName();
+		ROLE=ROLE.toUpperCase();
+		ROLE="ROLE_"+ROLE;
+		System.out.println(ROLE);
+		return  Arrays.asList(new SimpleGrantedAuthority(ROLE));
 	}
 
 	@Override
 	public String getPassword() {
 		// TODO Auto-generated method stub
 		return user.getPassword();
+	}
+	
+	public String getFirstname() {
+		return user.getFirstname();
+	}
+	
+	public String getLastname() {
+		return user.getLastname();
+	}
+	
+	
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	@Override

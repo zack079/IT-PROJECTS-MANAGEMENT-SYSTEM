@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -13,6 +15,7 @@ import com.myProject.projectManagementSystem.models.Developer;
 import com.myProject.projectManagementSystem.models.Director;
 import com.myProject.projectManagementSystem.models.Project;
 import com.myProject.projectManagementSystem.models.User;
+import com.myProject.projectManagementSystem.security.UserPrincipal;
 import com.myProject.projectManagementSystem.services.DemandService;
 import com.myProject.projectManagementSystem.services.DeveloperService;
 import com.myProject.projectManagementSystem.services.DirectorService;
@@ -37,10 +40,8 @@ public class TestController {
 	/*****TEST***/
 	@GetMapping("/test")
 	public String test() {
-		List<User> users=userService.getUsers();
-		for(User user:users) {
-			System.out.println(user);
-		}
+		User user=((UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
+		System.out.println(user);
 		return "test";
 	}
 	

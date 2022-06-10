@@ -8,8 +8,8 @@ import javax.persistence.*;
 @Entity
 public class ProjectManager extends User{
     private Date employment_date;
-    @OneToMany(mappedBy = "projectManager")
-    private List<Project> projets=new ArrayList<Project>();
+    @OneToMany(mappedBy = "projectManager",fetch = FetchType.EAGER)
+    private List<Project> projects=new ArrayList<Project>();
     @OneToMany(mappedBy = "projectManager")
     private List<Demand> demands=new ArrayList<Demand>();
     public ProjectManager(){
@@ -20,11 +20,15 @@ public class ProjectManager extends User{
     	this.employment_date = employment_date;
     }
 
-    public void setProjects(List<Project> projets) {
-        this.projets = projets;
-    }
+  
 
-    public List<Demand> getDemand() {
+    public List<Project> getProjects() {
+		return projects;
+	}
+	public void setProjects(List<Project> projects) {
+		this.projects = projects;
+	}
+	public List<Demand> getDemand() {
         return demands;
     }
 
@@ -40,23 +44,12 @@ public class ProjectManager extends User{
         this.employment_date = employment_date;
     }
 
-    public List<Project> getProjects() {
-        return projets;
-    }
-
-    
-    public List<Project> getProjets() {
-		return projets;
-	}
-	public void setProjets(List<Project> projets) {
-		this.projets = projets;
-	}
+  
+	
 	public List<Demand> getDemands() {
 		return demands;
 	}
-	public void setProjects(ArrayList<Project> projets) {
-        this.projets = projets;
-    }
+
 
     @Override
     public String toString() {
