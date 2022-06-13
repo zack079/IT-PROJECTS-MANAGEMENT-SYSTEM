@@ -5,7 +5,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
     
        <li class="nav-item">
-		    <a class="nav-link collapsed"  th:href="@{/projects-table}" sec:authorize="hasAnyRole('DIRECTOR', 'PROJECTMANAGER')">
+		    <a class="nav-link collapsed"  th:href="@{/projects-table}">
 		      <i class="bi bi-list-ul"></i>
 		      <span>Voir les projets</span>
 		    </a>
@@ -25,6 +25,12 @@
 		      <span>Voir les développeurs</span>
 		    </a>
 		  </li>
+		  <li class="nav-item" sec:authorize="hasAnyRole('DIRECTOR', 'PROJECTMANAGER')">
+		    <a class="nav-link collapsed"  th:href="@{/add-developer}">
+		      <i class="bi bi-person-plus-fill"></i>
+		      <span>Ajouter un développeur</span>
+		    </a>
+		  </li>
 		  
 		   <li class="nav-item" sec:authorize="hasRole('DIRECTOR')">
 		    <a class="nav-link collapsed"  th:href="@{/project-managers-table}">
@@ -33,7 +39,16 @@
 		    </a>
 		  </li>
 		  
-	 	<li class="nav-item" sec:authorize="hasAnyRole('DIRECTOR', 'PROJECTMANAGER')">
+		  <li class="nav-item" sec:authorize="hasRole('DIRECTOR')">
+		    <a class="nav-link collapsed"  th:href="@{/add-project-manager}">
+		      <i class="bi bi-person-plus"></i>
+		      <span>Ajouter un chef de projet</span>
+		    </a>
+		  </li>
+		  
+		  
+		  
+	 	<li class="nav-item">
 		    <a class="nav-link collapsed" th:href="@{/}">
 		      <i class="bi bi-bar-chart"></i>
 		      <span>Statistique</span>

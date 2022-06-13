@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Ajouter un chef de projet</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+	<div th:replace="header.html"></div>
+	<div th:replace="sidebar.html"></div>
+	
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Chef de projet</h1>
+     
+    </div><!-- End Page Title -->
+    <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${projectManagerAdded}">
+               Le chef de projet a été ajouté!  
+       </div>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${projectManagerNotAdded}">
+           Erreur lors de l'ajout du chef de projet
+   	</div>
+
+      <div class="row">
+        <div class="">
+
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Ajouter un chef de projet</h5>
+
+              <!-- General Form Elements -->
+              <form th:action="@{/project-manager-added}" method="post" th:object="${projectManager}">
+                <div class="row mb-3">
+                  <label for="usernameId" class="col-sm-2 col-form-label">Nom d'utilisateur</label>
+                  <div class="col-sm-10">
+                    <input th:field="*{username}" type="text" id="usernameId" name="username" class="form-control" required minlength="4">
+                    <div class="hibernate-validator-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}" ></div>
+                  	<div class="hibernate-validator-error" th:if="${UsernameAlreadyExists}" >Nom d'utilisateur existe déjà</div>
+
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                  <label for="lastnameId" class="col-sm-2 col-form-label">Nom</label>
+                  <div class="col-sm-10">
+                    <input th:field="*{lastname}" type="text" id="lastnameId" name="lastname" class="form-control" required minlength="3">
+                    <div class="hibernate-validator-error" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}" ></div>
+                  
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                  <label for="firstnameId" class="col-sm-2 col-form-label">Prénom</label>
+                  <div class="col-sm-10">
+                    <input th:field="*{firstname}" type="text" id="firstnameId" name="firstname" class="form-control" required minlength="3" >
+                    <div class="hibernate-validator-error" th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}" ></div>
+                  </div>
+                </div>
+
+
+
+                <div class="row mb-3">
+                  <label for="emailId" class="col-sm-2 col-form-label">Email</label>
+                  <div class="col-sm-10">
+                    <input th:field="*{email}" type="email" id="emailId" name="email" class="form-control" required >
+                    <div class="hibernate-validator-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}" ></div>
+                  </div>
+                </div>
+                
+                <div class="row mb-3">
+                  <label for="dateOfBirthId" class="col-sm-2 col-form-label">Date de naissance</label>
+                  <div class="col-sm-10">
+                    <input type="date" id="dateOfBirthId" name="dateOfBirth" class="form-control" required th:field="*{dateOfBirth}">
+                  </div>
+                </div> 
+                
+                <div class="row mb-3">
+                  <label for="addressId" class="col-sm-2 col-form-label">Adresse</label>
+                  <div class="col-sm-10">
+                    <input th:field="*{address}" type="text" id="addressId" name="address" class="form-control" required >
+                    <div class="hibernate-validator-error" th:if="${#fields.hasErrors('address')}" th:errors="*{address}" ></div>
+                  </div>
+                </div>
+                
+                <div class="row mb-3">
+                  <label for="cityId" class="col-sm-2 col-form-label">Ville</label>
+                  <div class="col-sm-10">
+                    <input th:field="*{city}" type="text" id="cityId" name="city" class="form-control" required >
+                    <div class="hibernate-validator-error" th:if="${#fields.hasErrors('city')}" th:errors="*{city}" ></div>
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                  <label for="employment_dateId" class="col-sm-2 col-form-label">Date d'embauche</label>
+                  <div class="col-sm-10">
+                    <input type="date" id="employment_dateId" name="employment_date" class="form-control" required th:field="*{employment_date}">
+                  </div>
+                </div> 
+				
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label">Soumettre</label>
+                  <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary">Soumettre</button>
+                  </div>
+                </div>
+
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="credits">
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/chart.js/chart.min.js"></script>
+  <script src="assets/vendor/echarts/echarts.min.js"></script>
+  <script src="assets/vendor/quill/quill.min.js"></script>
+  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>

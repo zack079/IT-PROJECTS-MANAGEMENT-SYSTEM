@@ -10,15 +10,20 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Size(min = 4, message = "Enter atleast 4 Characters!")   
+    @Size(min = 4, message = "le nom d'utilisateur doit contenir au moins 4 caractères!")
+    @Column(unique = true)
     private String username;
-	@Size(min = 4, message = "Enter atleast 4 Characters!")   
+    @Size(min = 3, message = "le prénom doit contenir au moins 3 caractères!")
     private String firstname;
+    @Size(min = 3, message = "le nom d'utilisateur doit contenir au moins 3 caractères!")
     private String lastname;
+    //@Column(unique = true)
     private String email;
     private String password;
     private Date dateOfBirth;
+    @Size(min = 1, message = "l'adresse ne doit pas être vide!")
     private String address;
+    @Size(min = 1, message = "la ville ne doit pas être vide!")
     private String city;
     public User(){
 
@@ -75,7 +80,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "id = "+ id +
+        return "username" + username +" id = "+ id +
                 ", firstname=" + firstname +
                         ", lastname=" + lastname  +
                         ", date of birth=" + dateOfBirth +

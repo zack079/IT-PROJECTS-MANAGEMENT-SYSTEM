@@ -59,14 +59,15 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 		 				"/project-manager-page",
 		 				"/delete-project",
 		 				"/edit-project-error",
+		 				"/add-project-manager",
 		 				"/delete-projectManager").hasRole("DIRECTOR")
-		 					
 		 	.antMatchers("/developer-page",
 		 				"/developers-table",
+		 				"/add-developer",
 		 				"/delete-developer",
 		 				"/edit-project",
 		 				"/old-projects-table",
-		 				"/projects-table",
+		 		//		"/projects-table",
 		 				"/finish-project").hasAnyRole("DIRECTOR","PROJECTMANAGER")
 		 					
 		 	.and()

@@ -75,8 +75,8 @@
                     <th scope="col">Chef de projet</th>
                     <th scope="col">Dévelopeurs</th>
                     <th scope="col" sec:authorize="hasRole('DIRECTOR')">Supprimer</th>
-                    <th scope="col">Éditer</th>
-                    <th scope="col">Terminer</th>
+                    <th scope="col" sec:authorize="hasAnyRole('DIRECTOR', 'PROJECTMANAGER')">Éditer</th>
+                    <th scope="col" sec:authorize="hasAnyRole('DIRECTOR', 'PROJECTMANAGER')">Terminer</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -88,19 +88,29 @@
                     <td th:text="${project.start_date}"></td>
                     <td th:text="${project.type}"></td>
                    
-					<td>
+					<td sec:authorize="hasRole('DIRECTOR')">
 						<a th:if="${project.projectManager != null}" th:text="${project.projectManager.firstname}+' ' +${project.projectManager.lastname}" th:href="@{project-manager-page?id={id} (id=${project.projectManager.id})}" ></a>
 					</td>
-                    <td>
+					<td sec:authorize="hasAnyRole('DEVELOPER', 'PROJECTMANAGER')">
+						<span th:if="${project.projectManager != null}" th:text="${project.projectManager.firstname}+' ' +${project.projectManager.lastname}" ></span>
+					</td>
+					
+					
+                    <td sec:authorize="hasAnyRole('DIRECTOR', 'PROJECTMANAGER')">
 						<a th:each="developer : ${project.developers}" th:if="${developer.project.projectID}==${project.projectID}" th:text="${developer.firstname}+' '+ ${developer.lastname} + ' ,'" th:href="@{developer-page?id={id} (id=${developer.id})}" ></a>
 					</td>
+					<td sec:authorize="hasRole('DEVELOPER')">
+						<span th:each="developer : ${project.developers}" th:if="${developer.project.projectID}==${project.projectID}" th:text="${developer.firstname}+' '+ ${developer.lastname} + ' ,'"></span>
+					</td>
+					
+					
 					<td sec:authorize="hasRole('DIRECTOR')"> 
 						<a th:href="@{delete-project?id={id} (id=${project.projectID})}" th:onclick="return confirm('Voulez-vous supprimer ce projet?');"><button class="btn btn-outline-danger" >Supprimer</button></a>  
 					</td>
-					<td> 
+					<td sec:authorize="hasAnyRole('DIRECTOR', 'PROJECTMANAGER')"> 
 						<a th:href="@{edit-project?id={id} (id=${project.projectID})}" th:onclick="return confirm('Voulez-vous Éditer ce projet?');"><button class="btn btn-outline-primary">Éditer</button></a>  
 					</td>
-					<td> 
+					<td sec:authorize="hasAnyRole('DIRECTOR', 'PROJECTMANAGER')"> 
 						<a th:href="@{finish-project?id={id} (id=${project.projectID})}" th:onclick="return confirm('Voulez-vous terminer ce projet?');"><button class="btn btn-outline-success">Terminer</button></a>  
 					</td>
                   </tr>

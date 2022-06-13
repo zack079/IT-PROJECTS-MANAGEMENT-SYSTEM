@@ -152,6 +152,7 @@ public class ProjectController {
 		int userID=((UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser().getId();
 		User user=userService.getUserById(userID);
 		Director director=null;
+		Developer developer=null;
 		ProjectManager projectManger=null;
 		List<Project> allProjects=new ArrayList<Project>();
 		if(user instanceof Director) {
@@ -160,9 +161,13 @@ public class ProjectController {
 		}else if(user instanceof ProjectManager) {
 			projectManger=(ProjectManager)user;
 			allProjects=projectManger.getProjects();
+		}else if(user instanceof Developer) {
+			developer=(Developer)user;
+			if(developer.getProject()!=null) {
+				allProjects.add(developer.getProject());
+			}
 		}
 		
-		//List<Project> allProjects= projectService.getProjects();
 		List<Project> currentProjects=new ArrayList<Project>();
 		
 		for(Project project : allProjects) {

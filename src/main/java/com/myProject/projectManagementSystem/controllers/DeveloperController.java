@@ -2,10 +2,15 @@ package com.myProject.projectManagementSystem.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -123,5 +128,62 @@ public class DeveloperController {
 		return "developers-table";
 		
 	}
+	
+	/****
+	 * 
+	 * 
+	 * Page that adds a developer
+	 * 
+	 */
+	
+	@GetMapping("add-developer")
+	public String addDeveloperPage(Model model) {
+		if (!model.containsAttribute("developer")) {
+			model.addAttribute("developer",new Developer());
+	    }
+		
+		return "add-developer";
+		
+	}
+	/****
+	 * 
+	 * 
+	 * Handling adding a developer
+	 * 
+	 */
+	@PostMapping("developer-added")
+	public String developerAdded(@Valid @ModelAttribute("developer") Developer developer,BindingResult bindingResult,RedirectAttributes redirectAttributes,Model model) {
+		if(!bindingResult.hasErrors()) {
+			
+			
+			String rawPassword = "pass";
+			String encodedPassword= new BCryptPasswordEncoder().encode(rawPassword);
+			developer.setPassword(encodedPassword);
+			try {
+				
+				developerService.addDeveloper(developer);
+			}catch(Exception exception) {
+				exception.printStackTrace();
+				redirectAttributes.addFlashAttribute("developer",developer); 
+				redirectAttributes.addFlashAttribute("UsernameAlreadyExists",true);
+				redirectAttributes.addFlashAttribute("developerNotAdded",true);
+				return "redirect:add-developer";
+			}
+			
+			
+			redirectAttributes.addFlashAttribute("developerAdded",true);
+		}else {
+			redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.developer", bindingResult);   
+			redirectAttributes.addFlashAttribute("developer",developer); 
+			redirectAttributes.addFlashAttribute("developerNotAdded",true);
+		}
+		
+		return "redirect:add-developer";
+		
+		
+	}
+	
+	
+	
 
 }

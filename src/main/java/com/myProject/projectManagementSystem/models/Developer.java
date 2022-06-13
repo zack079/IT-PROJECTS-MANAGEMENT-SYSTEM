@@ -1,6 +1,7 @@
 package com.myProject.projectManagementSystem.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Entity
 public class Developer extends User{
+	@Size(min = 1, message = "la spécialité ne doit pas être vide!")
     private String specialty;
     private Date employment_date;
     @ManyToOne
