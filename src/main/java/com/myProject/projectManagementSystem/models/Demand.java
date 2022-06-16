@@ -3,14 +3,17 @@ package com.myProject.projectManagementSystem.models;
 import java.util.Date;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Demand {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int demandID;
+    @Size(min = 4, message = "le titre doit contenir au moins 4 caractères!")   
     private String title;
-    private String description;
+    @Size(min = 10, message = "la description doit contenir au moins 10 caractères!")  
+    private String description; 
     private String state;
     private Date date;
     @ManyToOne

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Page chefs de projet</title>
+  <title>Créer une demande</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -29,72 +29,76 @@
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
 
-  
+
 </head>
 
 <body>
-<div th:replace="header.html"></div>
-<div th:replace="sidebar.html"></div>
-
+	<div th:replace="header.html"></div>
+	<div th:replace="sidebar.html"></div>
+	
 
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Chefs de projet</h1>
+      <h1 th:unless="${hasNoProject}">Demande</h1>
+      <h1 th:if="${hasNoProject}">Vous n'avez pas un chef de projet</h1>
+     
     </div><!-- End Page Title -->
-    <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${projectManagerAccountDeleted}">
-               La compte du chef de projet a été supprimé!  
+    <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${demandCreated}">
+               La demande a été inseré!  
        </div>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${demandNotCreated}">
+           Erreur de création de la demande!
+   	</div>
 
-    <section class="section">
-      <div class="row">
-        <div class="col-lg-12">
+      <div class="row" th:unless="${hasNoProject}">
+        <div class="">
 
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Table des chefs de projet</h5>
-              
-              <!-- Table with stripped rows -->
-              <table class="table datatable">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Nom et Prénom</th>
-                    <th scope="col">plus de détails	</th>
-                    <th scope="col">Supprimer</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr th:each="projectManager : ${projectManagers}">
-                    <th scope="row" th:text="${projectManager.id}"></th>
-                    <td th:text="${projectManager.firstname} + ' ' + ${projectManager.lastname}"></td>
-                    
-                    <td>
-                    	<a th:href="@{project-manager-page?id={id} (id=${projectManager.id})}" class="bi bi-link" >  </a> 
-                    </td>
-                    <td> 
-						<a th:href="@{delete-projectmanager-account?id={id} (id=${projectManager.id})}" th:onclick="return confirm('Voulez-vous supprimer ce chef de projuet?');"><button class="btn btn-outline-danger" >Supprimer</button></a>  
-					</td>
-                  </tr>
-                </tbody>
-              </table>
-              <!-- End Table with stripped rows -->
+              <h5 class="card-title">Créer une demande</h5>
 
+              <!-- General Form Elements -->
+              <form th:action="@{/demand-added}" method="post" th:object="${demand}">
+                <div class="row mb-3">
+                  <label for="titleId" class="col-sm-2 col-form-label">Titre</label>
+                  <div class="col-sm-10">
+                    <input th:field="*{title}" type="text" id="titleId" name="title" class="form-control" required minlength="4">
+                    <div class="hibernate-validator-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}" ></div>
+                  
+                  </div>
+                </div>
+                
+                <div class="row mb-3">
+                  <label for="descriptionId" class="col-sm-2 col-form-label">Description</label>
+                  <div class="col-sm-10">
+                    <textarea class="form-control" id="descriptionId" name ="description"style="height: 100px" required th:field="*{description}" minlength="10"></textarea>
+                  	<div class="hibernate-validator-error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}" ></div>
+                  </div>
+                </div>
+                
+				
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label">Soumettre</label>
+                  <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary">Soumettre</button>
+                  </div>
+                </div>
+
+              </form>
             </div>
           </div>
 
         </div>
       </div>
-    </section>
 
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">
-    <div class="copyright">
-    </div>
     <div class="credits">
-   
+      <!-- All the links in the footer should remain intact. -->
+      <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
     </div>
   </footer><!-- End Footer -->
 

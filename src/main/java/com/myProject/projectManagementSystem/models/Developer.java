@@ -17,7 +17,7 @@ public class Developer extends User{
     private Date employment_date;
     @ManyToOne
     private Project project;
-    @OneToMany(mappedBy = "developer")
+    @OneToMany(mappedBy = "developer",fetch = FetchType.EAGER)
     private List<Demand> demands=new ArrayList<Demand>();
     //TODO: problem when `fetch` was `FetchType.EAGER` 
     /*******

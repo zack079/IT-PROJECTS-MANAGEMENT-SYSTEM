@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Page développeur</title>
+  <title>Page de demandes</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -29,12 +29,7 @@
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
 
-  <!-- =======================================================
-  * Template Name: NiceAdmin - v2.2.2
-  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
+
 </head>
 
 <body>
@@ -45,10 +40,11 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Développeurs</h1>
+      <h1>Demandes</h1>
     </div><!-- End Page Title -->
-    <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${developerAccountDeleted}">
-               La compte du developpeur a été supprimé!  
+    
+      <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${demandDeleted}">
+               La demande a été supprimé!  
        </div>
 
     <section class="section">
@@ -57,36 +53,33 @@
 
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Table des développeurs</h5>
+              <h5 class="card-title">Table des Demandes</h5>
               
               <!-- Table with stripped rows -->
               <table class="table datatable">
                 <thead>
                   <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Nom et Prénom</th>
-                    <th scope="col">Spécialité</th>
+                    <th scope="col">Titre</th>
+                    <th scope="col">Description</th>
                     <th scope="col">état</th>
-                    <th scope="col">plus de détails	</th>
-                    <th scope="col">Supprimer</th>
+                    <th scope="col">Date de création</th>
+                    <th scope="col" sec:authorize="hasRole('PROJECTMANAGER')">Changer l'état</th>
+                  	<th scope="col">Supprimer</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr th:each="developer : ${developers}">
-                    <td scope="row" th:text="${developer.id}"></td>
-                    <td th:text="${developer.firstname} + ' ' + ${developer.lastname}"></td>
-                    <td th:text="${developer.specialty}"></td>
-                    <td th:if="${developer.project == null}">
-                    	<span class="badge bg-success">disponible</span>
-                    </td>
-                    <td th:unless="${developer.project == null}">
-                    	<span class="badge bg-secondary">indisponible</span>
-                    </td>
-                    <td>
-                    	<a th:href="@{developer-page?id={id} (id=${developer.id})}" class="bi bi-link" >  </a> 
-                    </td>
-                    <td> 
-						<a th:href="@{delete-developer-account?id={id} (id=${developer.id})}" th:onclick="return confirm('Voulez-vous supprimer ce développeur?');"><button class="btn btn-outline-danger" >Supprimer</button></a>  
+                  <tr th:each="demand : ${demands}">
+                    <th scope="row" th:text="${demand.demandID}"></th>
+                    <td th:text="${demand.title}"></td>
+                    <td th:text="${demand.description}"></td>
+                    <td th:text="${demand.state}"></td>
+                  	<td th:text="${demand.date}"></td>
+                  	<td sec:authorize="hasRole('PROJECTMANAGER')"> 
+						<a th:href="@{edit-demand?id={id} (id=${demand.demandID})}" th:onclick="return confirm('Voulez-vous Éditer ce demande?');"><button class="btn btn-outline-primary">Éditer</button></a>  
+					</td>
+					<td> 
+						<a th:href="@{delete-demand?id={id} (id=${demand.demandID})}" th:onclick="return confirm('Voulez-vous supprimer ce demande?');"><button class="btn btn-outline-danger" >Supprimer</button></a>  
 					</td>
                   </tr>
                 </tbody>

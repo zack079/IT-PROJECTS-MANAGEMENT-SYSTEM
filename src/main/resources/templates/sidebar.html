@@ -19,6 +19,20 @@
 		    </a>
 		  </li>
 		  
+		  <li class="nav-item" sec:authorize="hasRole('DEVELOPER')">
+		    <a class="nav-link collapsed" th:href="@{/add-demand}">
+		      <i class="bi bi-journal-plus"></i>
+		      <span>Créer une demande</span>
+		    </a>
+		  </li>
+		  
+		  <li class="nav-item" sec:authorize="hasAnyRole('DEVELOPER', 'PROJECTMANAGER')">
+		    <a class="nav-link collapsed" th:href="@{/demands-table}">
+		      <i class="bi bi-journals"></i>
+		      <span>Voir les demandes</span>
+		    </a>
+		  </li>
+		  
 		  <li class="nav-item" sec:authorize="hasAnyRole('DIRECTOR', 'PROJECTMANAGER')">
 		    <a class="nav-link collapsed"  th:href="@{/developers-table}">
 		      <i class="bi bi-people-fill"></i>

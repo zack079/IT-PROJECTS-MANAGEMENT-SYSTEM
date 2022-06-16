@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Page développeur</title>
+  <title>editer demande</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -29,85 +29,69 @@
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
 
-  <!-- =======================================================
-  * Template Name: NiceAdmin - v2.2.2
-  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
+  
 </head>
 
 <body>
-<div th:replace="header.html"></div>
+
+ <div th:replace="header.html"></div>
 <div th:replace="sidebar.html"></div>
 
 
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Développeurs</h1>
+      <h1>Editer demand ID :'<span th:text="${demand.demandID}"></span>'</h1>
+      
     </div><!-- End Page Title -->
-    <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${developerAccountDeleted}">
-               La compte du developpeur a été supprimé!  
+    <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${demandEdited}">
+               l'état a été changé!
        </div>
-
-    <section class="section">
-      <div class="row">
-        <div class="col-lg-12">
+  
+   	<div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${demandNotEdited}">
+           Erreur de changement d'état de la demand!
+   	</div>
+   	
+   	
+   	<!-- -->
+   	 <div class="row">
+        <div class="">
 
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Table des développeurs</h5>
-              
-              <!-- Table with stripped rows -->
-              <table class="table datatable">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Nom et Prénom</th>
-                    <th scope="col">Spécialité</th>
-                    <th scope="col">état</th>
-                    <th scope="col">plus de détails	</th>
-                    <th scope="col">Supprimer</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr th:each="developer : ${developers}">
-                    <td scope="row" th:text="${developer.id}"></td>
-                    <td th:text="${developer.firstname} + ' ' + ${developer.lastname}"></td>
-                    <td th:text="${developer.specialty}"></td>
-                    <td th:if="${developer.project == null}">
-                    	<span class="badge bg-success">disponible</span>
-                    </td>
-                    <td th:unless="${developer.project == null}">
-                    	<span class="badge bg-secondary">indisponible</span>
-                    </td>
-                    <td>
-                    	<a th:href="@{developer-page?id={id} (id=${developer.id})}" class="bi bi-link" >  </a> 
-                    </td>
-                    <td> 
-						<a th:href="@{delete-developer-account?id={id} (id=${developer.id})}" th:onclick="return confirm('Voulez-vous supprimer ce développeur?');"><button class="btn btn-outline-danger" >Supprimer</button></a>  
-					</td>
-                  </tr>
-                </tbody>
-              </table>
-              <!-- End Table with stripped rows -->
+              <h5 class="card-title">changer l'état d'avancement</h5>
 
+              <!-- General Form Elements -->
+              <form th:action="@{/edit-demand-state}" method="post" >
+              <input type="hidden" th:value="${demand.demandID}" name="demandID" />
+                
+                <div class="row mb-3">
+                  <label for="typeId" class="col-sm-2 col-form-label">Etat</label>
+                  <div class="col-sm-10">
+                    <input type="text" id="stateId" th:value="${demand.state}" name="state" class="form-control" required >
+                  </div>
+                </div>
+            
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label"></label>
+                  <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary">Soumettre</button>
+                  </div>
+                </div>
+
+              </form>
             </div>
           </div>
 
         </div>
       </div>
-    </section>
+   	
 
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">
-    <div class="copyright">
-    </div>
     <div class="credits">
-   
     </div>
   </footer><!-- End Footer -->
 

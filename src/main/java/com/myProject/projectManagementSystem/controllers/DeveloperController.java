@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.myProject.projectManagementSystem.models.Demand;
 import com.myProject.projectManagementSystem.models.Developer;
 import com.myProject.projectManagementSystem.models.Project;
+import com.myProject.projectManagementSystem.services.DemandService;
 import com.myProject.projectManagementSystem.services.DeveloperService;
 import com.myProject.projectManagementSystem.services.ProjectService;
 
@@ -30,6 +32,8 @@ public class DeveloperController {
 
 	@Autowired
 	private DeveloperService developerService;
+	@Autowired
+	private DemandService demandService;
 	
 	/********
 	 * 
@@ -182,6 +186,38 @@ public class DeveloperController {
 		
 		
 	}
+	
+	/*
+	 * 
+	 * Delete developer account
+	 * 
+	 * 
+	 */
+	
+	
+	@GetMapping("/delete-developer-account")
+	public String deleteDeveloperAccount(@RequestParam int id,RedirectAttributes redirectAttributes) {
+		try {
+			Developer developer= developerService.getDeveloperById(id);
+			developer.setOldProjects(null);
+			List<Demand> demands=developer.getDemands();
+			for(Demand demand:demands) {
+				demandService.deleteDemand(demand.getDemandID());
+			}
+			developer.setDemands(null);
+			developerService.addDeveloper(developer);
+			developerService.deleteDeveloper(developer.getId());
+		}catch(Exception exception) {
+			exception.printStackTrace();
+			return "redirect:error";
+		}
+		
+		redirectAttributes.addFlashAttribute("developerAccountDeleted",true);
+		
+		return "redirect:developers-table";
+	}
+	
+	
 	
 	
 	

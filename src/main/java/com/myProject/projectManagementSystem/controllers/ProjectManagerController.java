@@ -15,15 +15,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.myProject.projectManagementSystem.models.Demand;
 import com.myProject.projectManagementSystem.models.Developer;
+import com.myProject.projectManagementSystem.models.Project;
 import com.myProject.projectManagementSystem.models.ProjectManager;
+import com.myProject.projectManagementSystem.services.DemandService;
 import com.myProject.projectManagementSystem.services.ProjectManagerService;
+import com.myProject.projectManagementSystem.services.ProjectService;
 
 @Controller
 public class ProjectManagerController {
 	
 	@Autowired
 	private ProjectManagerService projectManagerService;
+	@Autowired
+	private DemandService demandService;
+	@Autowired
+	private ProjectService projectService;
+	
 	
 	//
 	/*****
@@ -42,7 +51,6 @@ public class ProjectManagerController {
 			exception.printStackTrace();
 			return "redirect:error";
 		}
-		
 		
 		return "project-manager-page";
 		
@@ -117,6 +125,41 @@ public class ProjectManagerController {
 		return "redirect:add-project-manager";
 		
 		
+	}
+	
+	/*
+	 * 
+	 * Delete projectManager account
+	 * 
+	 * 
+	 */
+	
+	
+	@GetMapping("/delete-projectmanager-account")
+	public String deleteProjectManagerAccount(@RequestParam int id,RedirectAttributes redirectAttributes) {
+		try {
+			ProjectManager projectManager= projectManagerService.getProjectManagerById(id);
+			List<Project> projects=projectManager.getProjects();
+			projectManager.setProjects(null);
+			for(Project project:projects) {
+				project.setProjectManager(null);
+				projectService.addProject(project);
+			}
+			List<Demand> demands=projectManager.getDemands();
+			projectManager.setDemands(null);
+			for(Demand demand:demands) {
+				demandService.deleteDemand(demand.getDemandID());
+			}
+			projectManagerService.addProjectManager(projectManager);
+			projectManagerService.deleteProjectManager(projectManager.getId());
+		}catch(Exception exception) {
+			exception.printStackTrace();
+			return "redirect:error";
+		}
+		
+		redirectAttributes.addFlashAttribute("projectManagerAccountDeleted",true);
+		
+		return "redirect:project-managers-table";
 	}
 	
 	

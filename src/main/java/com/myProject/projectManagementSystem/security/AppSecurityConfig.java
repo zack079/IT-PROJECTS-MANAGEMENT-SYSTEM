@@ -60,16 +60,19 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 		 				"/delete-project",
 		 				"/edit-project-error",
 		 				"/add-project-manager",
-		 				"/delete-projectManager").hasRole("DIRECTOR")
+		 				"/delete-projectManager",
+		 				"/delete-projectmanager-account").hasRole("DIRECTOR")
 		 	.antMatchers("/developer-page",
 		 				"/developers-table",
 		 				"/add-developer",
 		 				"/delete-developer",
 		 				"/edit-project",
 		 				"/old-projects-table",
-		 		//		"/projects-table",
+		 				"/delete-developer-account",
 		 				"/finish-project").hasAnyRole("DIRECTOR","PROJECTMANAGER")
-		 					
+		 	.antMatchers("/add-demand").hasRole("DEVELOPER")
+		 	.antMatchers("/demands-table","/delete-demand").hasAnyRole("DEVELOPER","PROJECTMANAGER")
+		 	.antMatchers("/edit-demand").hasRole("PROJECTMANAGER")
 		 	.and()
 		 	.formLogin().permitAll().defaultSuccessUrl("/index")
 		 	.and()

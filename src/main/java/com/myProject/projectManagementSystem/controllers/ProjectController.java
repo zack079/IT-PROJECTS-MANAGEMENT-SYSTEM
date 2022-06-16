@@ -10,10 +10,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +22,7 @@ import com.myProject.projectManagementSystem.models.Project;
 import com.myProject.projectManagementSystem.models.ProjectManager;
 import com.myProject.projectManagementSystem.models.User;
 import com.myProject.projectManagementSystem.security.UserPrincipal;
+import com.myProject.projectManagementSystem.services.DemandService;
 import com.myProject.projectManagementSystem.services.DeveloperService;
 import com.myProject.projectManagementSystem.services.ProjectManagerService;
 import com.myProject.projectManagementSystem.services.ProjectService;
@@ -44,6 +41,8 @@ public class ProjectController {
 	
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private DemandService demandService;
 	//
 	
 
@@ -326,6 +325,7 @@ public class ProjectController {
 			Project project  = projectService.getProjectById(projectID);
 			
 			if(project.getProjectManager()!=null) {
+				
 				project.setProjectManager(null);
 				redirectAttributes.addFlashAttribute("projectEdited",true);
 				projectService.addProject(project);
@@ -433,6 +433,32 @@ public class ProjectController {
 		return "old-projects-table";
 	}
 	
+	/****
+	 * changing project state for project manager
+	 * 
+	 */
+	@PostMapping("edit-project-state")
+	public String editProjectState(@RequestParam int projectID,@RequestParam String state,RedirectAttributes redirectAttributes) {
+
+		if(state.length()>=1) {
+			redirectAttributes.addFlashAttribute("projectEdited",true);
+			Project editedProject=new Project();
+			try {
+				editedProject = projectService.getProjectById(projectID);
+			}catch(Exception e) {
+				e.printStackTrace();
+				return "redirect:error";
+			}
+			editedProject.setState(state);
+			projectService.addProject(editedProject);
+		}else {
+			redirectAttributes.addFlashAttribute("projectStateNotEdited",true);
+		}
+		
+		return "redirect:edit-project?id="+projectID;
+	
+	
+	}
 	
 }
 

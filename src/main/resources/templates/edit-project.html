@@ -55,9 +55,43 @@
     <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${projectNotEdited}">
            Erreur de changement d'information du projet!
    	</div>
+   	<div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${projectStateNotEdited}">
+           Erreur de changement d'état du projet!
+   	</div>
    	
    	
    	<!-- -->
+   	 <div class="row" sec:authorize="hasRole('PROJECTMANAGER')">
+        <div class="">
+
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">changer l'état d'avancement</h5>
+
+              <!-- General Form Elements -->
+              <form th:action="@{/edit-project-state}" method="post" >
+              <input type="hidden" th:value="${project.projectID}" name="projectID" />
+                
+                <div class="row mb-3">
+                  <label for="typeId" class="col-sm-2 col-form-label">Etat</label>
+                  <div class="col-sm-10">
+                    <input type="text" id="stateId" th:value="${project.state}" name="state" class="form-control" required >
+                  </div>
+                </div>
+            
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label"></label>
+                  <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary">Soumettre</button>
+                  </div>
+                </div>
+
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
    	
      <!--start of form of editing a project-->
 	
