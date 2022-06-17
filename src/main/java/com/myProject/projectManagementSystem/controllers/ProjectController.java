@@ -186,7 +186,6 @@ public class ProjectController {
 	 * 
 	 * 
 	 * ******/
-	//TODO: add the possibility to change projects's states for project managers.
 	
 	@GetMapping("/edit-project")
 	public String editProjectPage(@RequestParam int id,Model model) {

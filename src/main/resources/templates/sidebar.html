@@ -61,13 +61,7 @@
 		  </li>
 		  
 		  
-		  
-	 	<li class="nav-item">
-		    <a class="nav-link collapsed" th:href="@{/}">
-		      <i class="bi bi-bar-chart"></i>
-		      <span>Statistique</span>
-		    </a>
-		  </li>	  
+	  
 		  
 		  <li class="nav-item" sec:authorize="hasAnyRole('DIRECTOR', 'PROJECTMANAGER')">
 		    <a class="nav-link collapsed" th:href="@{/old-projects-table}">
