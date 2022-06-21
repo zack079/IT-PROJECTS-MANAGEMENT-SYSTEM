@@ -29,12 +29,7 @@
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
 
-  <!-- =======================================================
-  * Template Name: NiceAdmin - v2.2.2
-  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
+  
 </head>
 
 <body>
@@ -69,7 +64,7 @@
                   <div class="col-sm-10">
                     <input th:field="*{title}" type="text" id="titleId" name="title" class="form-control" required minlength="4">
                     <div class="hibernate-validator-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}" ></div>
-                  
+           
                   </div>
                 </div>
                 <div class="row mb-3">

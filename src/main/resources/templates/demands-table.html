@@ -63,6 +63,7 @@
                     <th scope="col">Titre</th>
                     <th scope="col">Description</th>
                     <th scope="col">état</th>
+                    <th scope="col" sec:authorize="hasRole('PROJECTMANAGER')">Créer par</th>
                     <th scope="col">Date de création</th>
                     <th scope="col" sec:authorize="hasRole('PROJECTMANAGER')">Changer l'état</th>
                   	<th scope="col">Supprimer</th>
@@ -74,7 +75,9 @@
                     <td th:text="${demand.title}"></td>
                     <td th:text="${demand.description}"></td>
                     <td th:text="${demand.state}"></td>
+                  	<td th:text="${demand.developer.firstname}+' '+ ${demand.developer.lastname}" sec:authorize="hasRole('PROJECTMANAGER')"></td>
                   	<td th:text="${demand.date}"></td>
+
                   	<td sec:authorize="hasRole('PROJECTMANAGER')"> 
 						<a th:href="@{edit-demand?id={id} (id=${demand.demandID})}" th:onclick="return confirm('Voulez-vous Éditer ce demande?');"><button class="btn btn-outline-primary">Éditer</button></a>  
 					</td>
